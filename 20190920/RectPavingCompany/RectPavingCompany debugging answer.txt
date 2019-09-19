@@ -1,0 +1,6 @@
+Debugging RectPavingCompany Answers
+====================================
+
+First issue occurs on line 23. You have to change the users input from cementCost to framingCost so when refering to the variable later in the code it is correctly saved.
+
+The second issue occurs on line 26. You need to add 2 * Length and 2 * Width, the starter code has it subtracting.
