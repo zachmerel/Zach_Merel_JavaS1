@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="how-many-times-to-7" />
         <module name="howmanytimesto7" />
       </profile>
     </annotationProcessing>
