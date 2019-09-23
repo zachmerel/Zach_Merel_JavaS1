@@ -6,9 +6,16 @@ public class ArrayFunReverseIt {
     public static void main(String[] args) {
 
         int[] forwardArray = new int[] {1, 2, 3, 4, 5};
-        int[] backwardsArray = new int[] {5, 4, 3, 2, 1};
-
         System.out.println(Arrays.toString(forwardArray));
+
+        for(int i = 0; i < forwardArray.length / 2; i++)
+        {
+            int elementHolder = forwardArray[i];
+            forwardArray[i] = forwardArray[forwardArray.length - i - 1];
+            forwardArray[forwardArray.length - i - 1] = elementHolder;
+        }
+        int[] backwardsArray = forwardArray;
+
         System.out.println(Arrays.toString(backwardsArray));
     }
 }
