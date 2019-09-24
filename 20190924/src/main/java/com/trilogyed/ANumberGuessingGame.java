@@ -3,7 +3,7 @@ package com.trilogyed;
 import java.util.Random;
 import java.util.Scanner;
 
-public class aNumberGuessingGame {
+public class ANumberGuessingGame {
     public static void main(String[] args) {
         Random rand = new Random();
         int randomNumber = rand.nextInt((10 - 1) + 1) + 1;

@@ -2,7 +2,7 @@ package com.trilogyed;
 
 import java.util.Scanner;
 
-public class spaceBoxing {
+public class SpaceBoxing {
     public static void main(String[] args) {
         Scanner scanner= new Scanner(System.in);
         double venusGravity = .78;

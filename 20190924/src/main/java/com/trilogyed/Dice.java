@@ -2,7 +2,7 @@ package com.trilogyed;
 
 import java.util.Random;
 
-public class dice {
+public class Dice {
     public static void main(String[] args) {
         Random randomGenerator = new Random();
         System.out.println("HERE COMES THE DICE!");

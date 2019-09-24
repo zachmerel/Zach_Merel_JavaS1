@@ -1,6 +1,6 @@
 package com.trilogyed;
 
-public class modulusAnimation
+public class ModulusAnimation
 {
     public static void main( String[] args ) throws Exception
     {

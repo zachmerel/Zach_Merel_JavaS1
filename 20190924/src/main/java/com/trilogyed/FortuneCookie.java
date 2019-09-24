@@ -2,7 +2,7 @@ package com.trilogyed;
 
 import java.util.Random;
 
-public class fortuneCookie {
+public class FortuneCookie {
     public static void main(String[] args) {
         int fortuneNumberChoosen = 0;
 

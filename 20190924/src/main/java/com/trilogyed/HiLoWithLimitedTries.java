@@ -3,7 +3,7 @@ package com.trilogyed;
 import java.util.Random;
 import java.util.Scanner;
 
-public class hiLoWithLimitedTries {
+public class HiLoWithLimitedTries {
     public static void main(String[] args) {
         Random rand = new Random();
         int randomNumber = rand.nextInt((100 - 1) + 1) + 1;

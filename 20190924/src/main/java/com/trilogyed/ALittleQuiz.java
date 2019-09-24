@@ -2,7 +2,7 @@ package com.trilogyed;
 
 import java.util.Scanner;
 
-public class aLittleQuiz {
+public class ALittleQuiz {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int correctAnswers = 0;
