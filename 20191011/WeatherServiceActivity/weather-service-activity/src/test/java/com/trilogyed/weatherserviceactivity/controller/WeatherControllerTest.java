@@ -1,9 +1,15 @@
 package com.trilogyed.weatherserviceactivity.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trilogyed.weatherserviceactivity.models.Conditions;
 import com.trilogyed.weatherserviceactivity.models.Temperature;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
 
 import static org.hamcrest.Matchers.containsString;
@@ -14,7 +20,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@RunWith(SpringRunner.class)
+@WebMvcTest(WeatherController.class)
 public class WeatherControllerTest {
+
+    // Wiring in the MockMvc object
+    @Autowired
+    private MockMvc mockMvc;
+
+    // ObjectMapper used to convert Java objects to JSON and vice versa
+    private ObjectMapper mapper = new ObjectMapper();
 
     private Temperature temperature;
     private Conditions conditions;
@@ -39,7 +54,7 @@ public class WeatherControllerTest {
     }
 
     @Test
-    public void shouldReturnTempForGivenZipcode() throws Exception {
+    public void shouldReturnConditionsForGivenZipcode() throws Exception {
         // arrange - parameters and the results
         String outputJson = mapper.writeValueAsString(conditions);
 
@@ -58,10 +73,10 @@ public class WeatherControllerTest {
         String expectedMessage = "invalid input";
 
         mockMvc.perform(
-                get("/conditions/{zipcode}", 123456)     // act
+                get("/conditions/{zipcode}", 123456) )    // act
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())                 // assert
-                .andExpect(content().string(containsString(expectedMessage))));
+                .andExpect(content().string(containsString(expectedMessage)));
     }
 
 }
