@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: RecordStore Service
+  description: >-
+    A simple service that allows user to make request to a simple calculator API
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Local dev server
+paths:
+  /add:
+  # Routes for GET and POST under this path
+    post:
+      summary: Creates a new JSON object with operand1 and operand2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Record object definition found at the bottom of the file
+              $ref: '#/components/schemas/NumberList' 
+      responses:
+        '201':
+          description: Add product created
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/NumberList'
+        '422':
+          description: Missing operand or one or both operands not numbers
+  /mult:
+  # Routes for GET and POST under this path
+    post:
+      summary: Creates a new JSON object with operand1 and operand2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Record object definition found at the bottom of the file
+              $ref: '#/components/schemas/NumberList' 
+      responses:
+        '201':
+          description: Add product created
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/NumberList'
+        '422':
+          description: Missing operand or one or both operands not numbers 
+  /subtract:
+  # Routes for GET and POST under this path
+    post:
+      summary: Creates a new JSON object with operand1 and operand2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Record object definition found at the bottom of the file
+              $ref: '#/components/schemas/NumberList' 
+      responses:
+        '201':
+          description: Add product created
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/NumberList'
+        '422':
+          description: Missing operand or one or both operands not numbers
+  /divide:
+  # Routes for GET and POST under this path
+    post:
+      summary: Creates a new JSON object with operand1 and operand2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Record object definition found at the bottom of the file
+              $ref: '#/components/schemas/NumberList' 
+      responses:
+        '201':
+          description: Add product created
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/NumberList'
+        '422':
+          description: Missing operand or one or both operands not numbers
+
+components:
+  schemas:
+    NumberPair:
+      properties:
+        NumberA:
+          type: string
+        NumberB:
+          type: string
+      required: 
+        - NumberA
+        - NumberB
+    NumberList:
+      type: array
+      items: 
+        $ref: '#/components/schemas/NumberList'      
+

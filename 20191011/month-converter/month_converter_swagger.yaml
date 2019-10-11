@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  title: Month Converter Activity API
+  description: >-
+    A simple service that returns month names.
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Local dev server
+paths:
+  /day/{monthNumber}:
+    get:
+      summary: gets the month name for the given number
+      description: The month number must be between 1 and 12, inclusive.
+      parameters: 
+        - name: monthNumber
+          in: path
+          required: true
+          description: the number of the month
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+            maximum: 12
+      responses:
+        '200':
+          description: The name of the month
+          content:
+            application/json:
+              schema:
+                type: integer
+        '422':
+          description: The input is out of range

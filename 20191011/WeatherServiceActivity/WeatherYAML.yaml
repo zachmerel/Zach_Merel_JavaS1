@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Weather Service Activity
+  description: >-
+    A simple service that allows user to make request to get the weather.
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Local dev server
+paths:
+  /temp/{zipcode}:
+   get:
+      summary: Gets the temp for a zipcode
+      parameters:
+      - name: zipcode
+        in: path
+        required: true
+        description: the zipcode 
+        schema:
+          type: integer
+          format: int64
+          minimum: 10000
+          maxium: 99999
+      responses:
+        '200':
+          description: the weather
+          content:
+            application/json:
+              schema:
+                # we reference something in the schema defined at the bottom
+                $ref: '#/components/schemas/Temperature'
+        '422':
+          description: zipcode is not 5 digits  
+  /conditions/{zipcode}:
+   get:
+      summary: Gets the temp for a zipcode
+      parameters:
+      - name: zipcode
+        in: path
+        required: true
+        description: the zipcode 
+        schema:
+          type: integer
+          format: int64
+          minimum: 10000
+          maxium: 99999
+      responses:
+        '200':
+          description: the weather
+          content:
+            application/json:
+              schema:
+                # we reference something in the schema defined at the bottom
+                $ref: '#/components/schemas/Temperature'
+        '422':
+          description: zipcode is not 5 digits 
+components:
+  schemas:
+    Temperature:
+      properties:
+        fahrenheit:
+          type: integer
+        celsius:
+          type: integer
+      required: 
+        - fahrenheight
+        - calsius
+    TempList:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Temperature'
+    Conditions:
+      properties:
+        fahrenheit:
+          type: integer
+        celsius:
+          type: integer
+        windSpeed:
+          type: integer
+        windDirection:
+          type: string
+        skies:
+          type: string
+        precipitation:
+          type: string
+          
+      required: 
+        - fahrenheight
+        - calsius
+        - windSpeed
+        - windDirection
+        - skies
+        - precipitation
+    ConditionsList:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Temperature'       
+
