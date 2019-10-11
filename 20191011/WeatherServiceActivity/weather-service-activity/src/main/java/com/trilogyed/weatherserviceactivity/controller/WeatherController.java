@@ -1,19 +1,14 @@
 package com.trilogyed.weatherserviceactivity.controller;
 
 import com.trilogyed.weatherserviceactivity.exceptions.ZipcodeNotFiveDigitsException;
-import com.trilogyed.weatherserviceactivity.models.Conditons;
+import com.trilogyed.weatherserviceactivity.models.Conditions;
 import com.trilogyed.weatherserviceactivity.models.Temperature;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Condition;
-import java.util.stream.Collectors;
 
 //private Temperature temperatures;
 //private Conditions conditions;
@@ -24,7 +19,7 @@ public class WeatherController {
 
     temperatures = new Temperature(32, 0);
 
-    conditions = new Conditons(32, 0, 5, "NW", "Sunny", "none");
+    conditions = new Conditions(32, 0, 5, "NW", "Sunny", "none");
 
 
     @RequestMapping(value = "/temp/{zipcode}", method = RequestMethod.GET)

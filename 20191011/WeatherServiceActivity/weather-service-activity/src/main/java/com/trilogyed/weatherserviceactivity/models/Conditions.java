@@ -1,11 +1,9 @@
 package com.trilogyed.weatherserviceactivity.models;
 
-
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
-public class Conditons {
-
+public class Conditions {
     private int fahrenheit;
     private int celsius;
     @Size(min = 5, max = 5, message = "Zipcode must be five digits");
@@ -15,13 +13,12 @@ public class Conditons {
     private String skies;
     private String precipitation;
 
-    public Conditons() {
+    public Conditions() {
     }
 
-    public Conditons(int fahrenheit, int celsius, String zipcode, int windSpeed, String windDirectio, String skies, String precipitation) {
+    public Conditions(int fahrenheit, int celsius, int windSpeed, String windDirectio, String skies, String precipitation) {
         this.fahrenheit = fahrenheit;
         this.celsius = celsius;
-        this.zipcode = zipcode;
         this.windSpeed = windSpeed;
         this.windDirectio = windDirectio;
         this.skies = skies;
@@ -89,14 +86,14 @@ public class Conditons {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Conditons conditons = (Conditons) o;
-        return fahrenheit == conditons.fahrenheit &&
-                celsius == conditons.celsius &&
-                zipcode == conditons.zipcode &&
-                windSpeed == conditons.windSpeed &&
-                Objects.equals(windDirectio, conditons.windDirectio) &&
-                Objects.equals(skies, conditons.skies) &&
-                Objects.equals(precipitation, conditons.precipitation);
+        Conditions that = (Conditions) o;
+        return fahrenheit == that.fahrenheit &&
+                celsius == that.celsius &&
+                windSpeed == that.windSpeed &&
+                Objects.equals(zipcode, that.zipcode) &&
+                Objects.equals(windDirectio, that.windDirectio) &&
+                Objects.equals(skies, that.skies) &&
+                Objects.equals(precipitation, that.precipitation);
     }
 
     @Override
@@ -106,10 +103,10 @@ public class Conditons {
 
     @Override
     public String toString() {
-        return "Conditons{" +
+        return "Conditions{" +
                 "fahrenheit=" + fahrenheit +
                 ", celsius=" + celsius +
-                ", zipcode=" + zipcode +
+                ", zipcode='" + zipcode + '\'' +
                 ", windSpeed=" + windSpeed +
                 ", windDirectio='" + windDirectio + '\'' +
                 ", skies='" + skies + '\'' +
