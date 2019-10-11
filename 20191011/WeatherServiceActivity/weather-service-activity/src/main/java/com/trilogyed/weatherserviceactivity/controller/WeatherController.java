@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-//private Temperature temperatures;
-//private Conditions conditions;
+
 
 @RestController
 public class WeatherController {
     private Temperature temperatures;
     private Conditions conditions;
-
+ public Temperature()
     temperatures = new Temperature(32, 0);
 
     conditions = new Conditions(32, 0, 5, "NW", "Sunny", "none");
