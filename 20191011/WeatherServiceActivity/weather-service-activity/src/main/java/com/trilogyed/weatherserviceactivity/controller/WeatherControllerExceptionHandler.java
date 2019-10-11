@@ -18,7 +18,7 @@ import java.util.List;
 @RestControllerAdvice
 @RequestMapping(produces = "application/vnd.error+json")
 
-public class WeatherControllerExceptionHandler {
+public class    WeatherControllerExceptionHandler {
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity<VndErrors> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest request) {
