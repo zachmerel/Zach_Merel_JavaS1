@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Conditions {
     private int fahrenheit;
     private int celsius;
-    @Size(min = 5, max = 5, message = "Zipcode must be five digits");
+    @Size(min = 5, max = 5, message = "Zipcode must be five digits")
     private String zipcode;
     private int windSpeed;
     private String windDirectio;
