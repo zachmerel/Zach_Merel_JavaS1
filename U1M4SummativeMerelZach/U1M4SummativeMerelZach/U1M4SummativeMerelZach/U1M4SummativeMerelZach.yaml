@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  title: U1M4SummativeMerelZach
+  description: >-
+    A simple service that allows a user to make API calls.
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Local dev server
+paths:
+  /magic:
+    post:
+      summary: Gives an 8-ball answer to a user's question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Record object definition found at the bottom of the file
+              $ref: '#/components/schemas/Anwser'
+      responses:
+        '201':
+          description: A 8-Ball object answer
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/Anwser'
+        '400':
+          description: Invalid request syntax
+  /quote:
+    get:
+      summary: Retrieves a random quote
+      parameters: 
+        - name: quote
+          in: path
+          required: true
+          description: random quote 
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: random quote
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/Quote'
+        '400':
+          description: Invalid request syntax        
+  /word:
+    get:
+      summary: Retrieves a random definition
+      parameters: 
+        - name: definition
+          in: path
+          required: true
+          description: random definition 
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: random definition
+          content:
+            application/json:
+              schema:
+                # we are referencing the Record object definition found at the bottom of the file
+                $ref: '#/components/schemas/Definition'  
+components:
+  schemas:
+    Anwser:
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+      required: 
+        - question
+        - answer
+    Quote:
+      properties:
+        author:
+          type: string
+        quote:
+          type: string
+      required: 
+        - author
+        - quote 
+    Definition:
+      properties:
+        word:
+          type: string
+        definition:
+          type: string
+      required: 
+        - word
+        - definition    
+    
