@@ -1,0 +1,602 @@
+openapi: 3.0.0
+info:
+  title: ZachMerelU1Capstone
+  description: >-
+   This project involves creating a simple database backed REST inventory management web service for a Video Game Store.
+  version: 0.0.1
+servers:
+  - url: 'http://localhost:8080'
+    description: Local dev server
+paths:
+
+  /games:
+    # Routed to GET games
+    get:
+      summary: returns all games in the database
+      responses:
+        '200':
+          description: we received the data as intended
+          content:
+            application/json:
+              schema:
+                # we are referencing the Game properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Game'
+    post: 
+      summary: adds a new game to the database
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              # we are referencing the Game properties in the schema below
+              $ref: '#/components/schemas/game_store/properties/Game'
+      responses:
+        '201':
+          description: A game object
+          content: 
+            application/json:
+              schema:
+                # we are referencing the Game properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Game'
+        '400':
+          description: invalid request syntax
+        '422':
+          description: incomplete game information; some required fields missing.
+          
+  /game/{id}:
+    get:
+      summary: get a specific game by Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the game you'd like to retrieve
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: game matching given Id
+          content:
+            application/json:
+              schema:
+                # we are referencing the Game object definition below
+                $ref: '#/components/schemas/game_store/properties/Game'
+    delete:
+      summary: deletes an entry for the game by a given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the game you'd like to delete
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: game successfully deleted
+    put:
+      summary: updates the entry for the game with the given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the game you'd like to update
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Game object definition below
+              $ref: '#/components/schemas/game_store/properties/Game'
+      responses:
+        '200':
+          description: game record successfully updated
+        '422':
+          description: some field is missing or incorrect; Game information is malformed—including not matching id
+          
+  /game/{studio}:
+    # Routed to GET games by studio
+    get:
+      summary: get games made by a studio
+      parameters: 
+        - name: studio
+          in: path
+          required: true
+          description: All Games made by a studio
+          schema:
+            type: string
+      responses:
+        '200':
+          description: studio matching given games
+        '404':
+          description: studio not found  
+          content:
+            application/json:
+              schema:
+                # we are referencing the Game properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Game' 
+  /game/{esrb_rating}:
+    # Routed to GET games by esrb_rating
+    get:
+      summary: get games with an esrb_rating
+      parameters: 
+        - name: esrb_rating
+          in: path
+          required: true
+          description: All Games with an esrb_rating
+          schema:
+            type: string
+      responses:
+        '200':
+          description: esrb_rating matching given games
+        '404':
+          description: rating not found
+          content:
+            application/json:
+              schema:
+                # we are referencing the Game properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Game'
+                
+  /game/{title}:
+    # Routed to GET game by title
+    get:
+      summary: get game with title
+      parameters: 
+        - name: title
+          in: path
+          required: true
+          description: get game with title
+          schema:
+            type: string
+      responses:
+        '200':
+          description: title matching given game
+        '404':
+          description: title not found  
+          content:
+            application/json:
+              schema:
+                # we are referencing the Game properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Game'              
+  /consoles:
+    # Routed to GET consoles
+    get:
+      summary: returns all consoles in the database
+      responses:
+        '200':
+          description: we received the data as intended
+          content:
+            application/json:
+              schema:
+                # we are referencing the Console properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Console'
+    post: 
+      summary: adds a new console to the database
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              # we are referencing the Console properties in the schema below
+              $ref: '#/components/schemas/game_store/properties/Console'
+      responses:
+        '201':
+          description: A console object
+          content: 
+            application/json:
+              schema:
+                # we are referencing the Console properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Console'
+        '400':
+          description: invalid request syntax
+        '422':
+          description: incomplete console information; some required fields missing.
+  
+  /console/{id}:
+    get:
+      summary: get a specific console by Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the console you'd like to retrieve
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: console matching given Id
+          content:
+            application/json:
+              schema:
+                # we are referencing the Console properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Console'
+    delete:
+      summary: deletes an entry for the console by a given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the console you'd like to delete
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: console successfully deleted
+    put:
+      summary: updates the entry for the console with the given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the console you'd like to update
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the Console properties in the schema below
+              $ref: '#/components/schemas/game_store/properties/Console'
+      responses:
+        '200':
+          description: Console record successfully updated
+        '422':
+          description: some field is missing or incorrect; Console information is malformed—including not matching id                 
+  
+  /console/{manufacturer}:
+    # Routed to GET console by manufacturer
+    get:
+      summary: get consoles made by manufacturer
+      parameters: 
+        - name: manufacturer
+          in: path
+          required: true
+          description: get console made by manufacturer
+          schema:
+            type: string
+      responses:
+        '200':
+          description: manufacturer matching given console
+        '404':
+          description: console not found  
+          content:
+            application/json:
+              schema:
+                # we are referencing the Console properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/Console'         
+  /tShirt:
+    # Routed to GET t-shrits
+    get:
+      summary: returns all t-shirts in the database
+      responses:
+        '200':
+          description: we received the data as intended
+          content:
+            application/json:
+              schema:
+                # we are referencing the tShirt properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/tShirt'
+    post: 
+      summary: adds a new tShirt to the database
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              # we are referencing the tShirt properties in the schema below
+              $ref: '#/components/schemas/game_store/properties/tShirt'
+      responses:
+        '201':
+          description: A tShirt object
+          content: 
+            application/json:
+              schema:
+                # we are referencing the tShirt properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/tShirt'
+        '400':
+          description: invalid request syntax
+        '422':
+          description: incomplete tShirt information; some required fields missing.
+          
+  /tShirt/{id}:
+    get:
+      summary: get a specific tShirt by Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the tShirt you'd like to retrieve
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: tShirt matching given Id
+          content:
+            application/json:
+              schema:
+                # we are referencing the tShirt object definition below
+                $ref: '#/components/schemas/game_store/properties/tShirt'
+    delete:
+      summary: deletes an entry for the tShirt by a given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the tShirt you'd like to delete
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: tShirt successfully deleted
+    put:
+      summary: updates the entry for the tShirt with the given Id
+      parameters: 
+        - name: id
+          in: path
+          required: true
+          description: id of the tShirt you'd like to update
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              # we are referencing the tShirt object definition below
+              $ref: '#/components/schemas/game_store/properties/tShirt'
+      responses:
+        '200':
+          description: tShirt record successfully updated
+        '422':
+          description: some field is missing or incorrect; tShirt information is malformed—including not matching id
+          
+  /game/{color}:
+    # Routed to GET tShirts by color
+    get:
+      summary: get tShirts by color
+      parameters: 
+        - name: color
+          in: path
+          required: true
+          description: All tShirts  by a color
+          schema:
+            type: string
+      responses:
+        '200':
+          description: color matching given tShirts
+        '404':
+          description: color not found  
+          content:
+            application/json:
+              schema:
+                # we are referencing the tShirt properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/tShirt' 
+  /tShirt/{size}:
+    # Routed to GET games by esrb_rating
+    get:
+      summary: get tShirts by size
+      parameters: 
+        - name: size
+          in: path
+          required: true
+          description: All tShirts with a size
+          schema:
+            type: string
+      responses:
+        '200':
+          description: size matching given tShirts
+        '404':
+          description: size not found
+          content:
+            application/json:
+              schema:
+                # we are referencing the tShirt properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/tShirt'
+
+  /invoiceViewModel:
+    # Routed to GET invoice
+    post: 
+      summary: adds a new invoice into the database
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              # we are referencing the Invoice properties in the schema below
+              $ref: '#/components/schemas/game_store/properties/InvoiceViewModel'
+      responses:
+        '201':
+          description: An Invoice object
+          content: 
+            application/json:
+              schema:
+                # we are referencing the Invoice properties in the schema below
+                $ref: '#/components/schemas/game_store/properties/InvoiceViewModel'
+        '400':
+          description: invalid request syntax
+        '422':
+          description: incomplete invoice information; some required fields missing. 
+          
+components:
+  schemas:
+    game_store:
+      properties:
+        Game:
+          properties:
+            game_id:
+              type: integer
+            title:
+              type: string
+            esrb_rating:
+              type: string
+            description:
+              type: string
+            price:
+              type: number
+            studio:
+              type: string
+            quantity:
+              type: integer
+          required:
+            - game_id
+            - title
+            - esrb_rating
+            - description
+            - price 
+            - studio
+        Console:
+          properties:
+            console_id:
+              type: integer
+            model:
+              type: string
+            manufacturer:
+              type: string
+            memory_amount:
+              type: string
+            processor:
+              type: string
+            price:
+              type: number
+            quantity:
+              type: integer
+          required: 
+            - console_id
+            - com.trilogyed.ZachMerelU1Capstone.model
+            - manufacturer
+            - price
+            - quantity
+        tShirt:
+          properties:
+            t_shirt_id:
+              type: integer
+            size:
+              type: string
+            color:
+              type: string
+            description:
+              type: string
+            price:
+              type: number
+            quantity:
+              type: integer
+          required:
+            - t_shirt_id
+            - size
+            - color
+            - description
+            - price
+            - quantity
+        InvoiceViewModel:
+            properties:
+              invoice_id:
+                type: integer
+              name:
+                type: string
+              street:
+                type: string
+              city:
+                type: string
+              state:
+                type: string
+              zipcode:
+                type: string
+              item_type:
+                type: string
+              tShirt:
+                type: object
+                items:
+                  $ref: '#/components/schemas/game_store/properties/tShirtModel'
+              console:
+                type: object
+                items:
+                  $ref: '#/components/schemas/game_store/properties/ConsoleModel'
+              game:
+                type: object
+                items:
+                  $ref: '#/components/schemas/game_store/properties/GameModel'  
+              unit_price:
+                type: number
+              quantity:
+                type: integer
+              subtotal:
+                type: number
+              tax:
+                type: number
+              processing_fee:
+                type: number
+              total:
+                type: number
+            required:
+              - invoice_id
+              - name
+              - street
+              - city
+              - state
+              - zipcode
+              - item_type
+              - item_id
+              - unit_price
+              - quantity
+        
+        tShirtModel:
+            properties:
+              t_shirt_id:
+                type: integer
+              size:
+                type: string
+              color:
+                type: string
+              description:
+                type: string
+              price:
+                type: number
+        ConsoleModel:
+          properties:
+            console_id:
+              type: integer
+            model:
+              type: string
+            manufacturer:
+              type: string
+            memory_amount:
+              type: string
+            processor:
+              type: string
+            price:
+              type: number
+        GameModel:
+          properties:
+            game_id:
+              type: integer
+            title:
+              type: string
+            esrb_rating:
+              type: string
+            description:
+              type: string
+            price:
+              type: number
+            studio:
+              type: string
+            
