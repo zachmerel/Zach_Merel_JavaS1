@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b22d454a-e8de-425c-894b-79d48539caa8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestMostFrequestString.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/classes/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/trilogyed/MostFrequentString.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="543">
+              <caret line="51" column="23" selection-start-line="51" selection-start-column="23" selection-end-line="51" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/TestMostFrequestString.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="506">
+              <caret line="39" column="62" selection-start-line="39" selection-start-column="62" selection-end-line="39" selection-end-column="62" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/test/java/TestMostFrequestString.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/trilogyed/MostFrequentString.java" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/homework-most-frequent-string.iml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/compiler.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__junit_junit_4_12.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1905" />
+    <option name="y" value="-15" />
+    <option name="width" value="1953" />
+    <option name="height" value="2093" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="trilogyed" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="homework-most-frequent-string" type="b2602c69:ProjectViewProjectNode" />
+              <item name="homework_most_frequent_string" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.TestMostFrequestString.shouldTestThatMostFrequentElementInTestIsReturned">
+    <configuration name="MostFrequentString" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.trilogyed.MostFrequentString" />
+      <module name="homework-most-frequent-string" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.trilogyed.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestMostFrequestString.shouldTestThatMostFrequentElementInTestIsReturned" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="homework-most-frequent-string" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestMostFrequestString" />
+      <option name="METHOD_NAME" value="shouldTestThatMostFrequentElementInTestIsReturned" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="homework-most-frequent-string" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestMostFrequestString" />
+      <option name="METHOD_NAME" value="shouldTestToSeeIfListIsEmpty" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestMostFrequestString.shouldTestThatMostFrequentElementInTestIsReturned" />
+        <item itemvalue="JUnit.TestMostFrequestString.shouldTestToSeeIfListIsEmpty" />
+        <item itemvalue="Application.MostFrequentString" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b22d454a-e8de-425c-894b-79d48539caa8" name="Default Changelist" comment="" />
+      <created>1572610758070</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1572610758070</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 26m 59s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 31m 47s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 33m 25s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 35m 08s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 36m 07s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 36m 22s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 36m 30s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestToSeeIfListIsEmpty - 2019.11.01 at 07h 51m 33s.xml">
+      <configuration name="TestMostFrequestString.shouldTestToSeeIfListIsEmpty" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestMostFrequestString_shouldTestThatMostFrequentElementInTestIsReturned - 2019.11.01 at 07h 56m 11s.xml">
+      <configuration name="TestMostFrequestString.shouldTestThatMostFrequentElementInTestIsReturned" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="762" y="-6" width="781" height="837" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="UI Designer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.24896266" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32956153" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39886847" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Maven" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/test/java/TestMostFrequestString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="39" column="62" selection-start-line="39" selection-start-column="62" selection-end-line="39" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/trilogyed/MostFrequentString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="51" column="23" selection-start-line="51" selection-start-column="23" selection-end-line="51" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
