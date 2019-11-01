@@ -29,7 +29,7 @@ public class GameDaoJdbcTemplateImpl implements GameDao {
     private static final String GET_GAME_BY_ESRB_RATING_SQL =
             "select * from game where esrb_rating = ?";
     private static final String GET_GAME_BY_TITLE_SQL =
-            "select * from game where title = ?";
+            "select * from game where title like ? ";
     private static final String DELETE_GAME_SQL =
             "delete from game where game_id = ?";
     private static final String GET_ALL_GAMES_SQL =
@@ -95,7 +95,7 @@ public class GameDaoJdbcTemplateImpl implements GameDao {
     @Override
     public List<Game> getAllGamesByTitle(String title) {
         try{
-            return jdbcTemplate.query(GET_GAME_BY_TITLE_SQL, this::mapRowToGame, title);
+            return jdbcTemplate.query(GET_GAME_BY_TITLE_SQL, this::mapRowToGame, "%" + title + "%");
         }catch(EmptyResultDataAccessException erdae){
             System.out.println("There is no game with studio " + title + "; message: " + erdae.getMessage());
             return null;

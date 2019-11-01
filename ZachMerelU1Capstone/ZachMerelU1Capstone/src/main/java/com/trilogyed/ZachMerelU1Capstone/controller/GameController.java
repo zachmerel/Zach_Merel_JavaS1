@@ -65,7 +65,7 @@ public class GameController {
     }
 
     //GET GAME BY STUDIO
-    @GetMapping("/game/{studio}")
+    @GetMapping("/game/studio/{studio}")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> getAllGamesByStudio(@PathVariable String studio) {
         List<Game> games = gameDao.getAllGamesByStudio(studio);
@@ -73,7 +73,7 @@ public class GameController {
     }
 
     //GET GAME BY ESRB_RATING
-    @GetMapping("/game/{esrb_rating}")
+    @GetMapping("/game/esrb_rating/{esrb_rating}")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> getAllGamesByEsrbRating(@PathVariable String esrb_rating) {
         List<Game> games = gameDao.getAllGamesByEsrbRating(esrb_rating);
@@ -81,7 +81,7 @@ public class GameController {
     }
 
     //GET GAME BY TITLE
-    @GetMapping("/game/{title}")
+    @GetMapping("/game/title/{title}")
     @ResponseStatus(HttpStatus.OK)
     public List<Game> getAllGamesByTitle(@PathVariable String title) {
         List<Game> games = gameDao.getAllGamesByTitle(title);

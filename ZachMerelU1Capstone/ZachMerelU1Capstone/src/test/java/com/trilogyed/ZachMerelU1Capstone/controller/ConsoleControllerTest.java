@@ -55,15 +55,16 @@ public class ConsoleControllerTest {
         manufacturerList.add(new Console(2, "PlayStation 3", "Sony", "25gb", "Sony2008", BigDecimal.valueOf(299.99), 50));
         manufacturerList.add(new Console(3, "PlayStation 4", "Sony", "500gb", "Sony2012", BigDecimal.valueOf(349.99), 125));
 
+        Console createMockConsoleObject = new Console("PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
         //GET ALL MOCK
         when(consoleDao.getAllConsoles()).thenReturn(consoleList);
         //GET CONSOLE BY ID MOCK
         when(consoleDao.getConsole(1)).thenReturn(consoleList.get(0));
-        //CREATE/UPDATE CONSOLE MOCK?
-        when(consoleDao.addConsole(consoleList.get(0))).thenReturn(consoleList.get(0));
+        //CREATE CONSOLE MOCK
+        when(consoleDao.addConsole(createMockConsoleObject)).thenReturn(consoleList.get(0));
         //GET CONSOLE BY MANUFACTURER MOCK
         when(consoleDao.getAllConsolesByManufacturer("Sony")).thenReturn(manufacturerList);
-
+        //UPDATE CONSOLE RETURNS VOID SO NO MOCK POSSIBLE
 
     }
 
@@ -85,7 +86,7 @@ public class ConsoleControllerTest {
 
     //GET CONSOLE BY ID
     @Test
-    public void shouldGetAConsoleById() throws  Exception {
+    public void shouldGetAConsoleById() throws Exception {
         String outputJson = mapper.writeValueAsString(new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
         // act
         mockMvc
@@ -100,9 +101,8 @@ public class ConsoleControllerTest {
     @Test
     public void shouldCreateANewConsole() throws Exception {
         //arrange
-
-        String inputJson = mapper.writeValueAsString(new Console(5,"PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
-        String outputJson = mapper.writeValueAsString(new Console(5, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
+        String inputJson = mapper.writeValueAsString(new Console("PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
+        String outputJson = mapper.writeValueAsString(new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
 
         // act
         mockMvc.perform(
@@ -132,24 +132,15 @@ public class ConsoleControllerTest {
     @Test
     public void shouldUpdateConsoleInfo() throws Exception {
         // arrange
-        Console inputAndOutputRecordForPut = new Console(5, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
-        String inputAndOutputJson = mapper.writeValueAsString(inputAndOutputRecordForPut);
-        //String outputJson = mapper.writeValueAsString(inputAndOutRecordForPut);
+        Console inputConsoleForPut = new Console(1, "PlayStation 3", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
+        String inputJson = mapper.writeValueAsString(inputConsoleForPut);
 
         mockMvc.perform(
                 put("/console/{id}", 1)     // act
-                        .content(inputAndOutputJson)
+                        .content(inputJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())                 // assert
-                .andExpect(content().json(inputAndOutputJson));
-//                .andExpect(jsonPath("$.console_id").value(3))
-//                .andExpect(jsonPath("$.model").value("Playstation 2"))
-//                .andExpect(jsonPath("$.manufacturer").value("Sony"))
-//                .andExpect(jsonPath("$.memory_amount").value("16mb"))
-//                .andExpect(jsonPath("$.processor").value("Sony2001 "))
-//                .andExpect(jsonPath("$.price").value(BigDecimal.valueOf(199.99)))
-//                .andExpect(jsonPath("$.quantity").value("Sony2001 "));
+                .andExpect(status().isOk());          // assert
     }
 
     //GET CONSOLE BY MANUFACTURER
@@ -160,7 +151,7 @@ public class ConsoleControllerTest {
 
         // act
         mockMvc
-                .perform(get("/console/manufacturer/{manufacturer}","Sony"))        // Doing a GET request
+                .perform(get("/console/manufacturer/{manufacturer}", "Sony"))        // Doing a GET request
                 .andDo(print())                             // We need to print the results
                 .andExpect(status().isOk())    //assert     // This should be OK
                 .andExpect(content().json(outputJson));     // this is what the response should be.
@@ -168,5 +159,5 @@ public class ConsoleControllerTest {
     }
 
 
-    }
+}
 

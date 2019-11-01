@@ -183,13 +183,14 @@ public class GameDaoTest {
         game1.setQuantity(1);
 
         gameDao.addGame(game1);
+        gameDao.addGame(game1);
 
 
         //act
         List<Game> games = gameDao.getAllGamesByTitle("Grand Theft Auto: Vice City");
 
         //assert
-        assertEquals(1, games.size());
+        assertEquals(2, games.size());
     }
 
     @Test

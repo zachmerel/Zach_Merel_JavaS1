@@ -11,16 +11,11 @@ import java.util.Objects;
 public class InvoiceViewModel {
 
     private int invoice_id;
-    @NotNull
     private String name;
-    @NotNull
     private String street;
     private String city;
-    @NotNull
     private String state;
-    @NotNull
     private String zipcode;
-    @NotNull
     private String item_type;
     private Console console;
     private TShirt tShirt;
@@ -30,6 +25,29 @@ public class InvoiceViewModel {
     private BigDecimal tax;
     private BigDecimal processing_fee;
     private BigDecimal total;
+
+    public InvoiceViewModel() {
+    }
+
+    public InvoiceViewModel(int invoice_id, String name, String street, String city, String state, String zipcode, String item_type, Console console, TShirt tShirt, Game game, BigDecimal unit_price, BigDecimal subtotal, BigDecimal tax, BigDecimal processing_fee, BigDecimal total) {
+        this.invoice_id = invoice_id;
+        this.name = name;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipcode = zipcode;
+        this.item_type = item_type;
+        this.console = console;
+        this.tShirt = tShirt;
+        this.game = game;
+        this.unit_price = unit_price;
+        this.subtotal = subtotal;
+        this.tax = tax;
+        this.processing_fee = processing_fee;
+        this.total = total;
+    }
+
+
 
     public int getInvoice_id() {
         return invoice_id;
@@ -175,5 +193,26 @@ public class InvoiceViewModel {
     @Override
     public int hashCode() {
         return Objects.hash(invoice_id, name, city, state, zipcode, item_type, console, tShirt, game, unit_price, subtotal, tax, processing_fee, total);
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceViewModel{" +
+                "invoice_id=" + invoice_id +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", item_type='" + item_type + '\'' +
+                ", console=" + console +
+                ", tShirt=" + tShirt +
+                ", game=" + game +
+                ", unit_price=" + unit_price +
+                ", subtotal=" + subtotal +
+                ", tax=" + tax +
+                ", processing_fee=" + processing_fee +
+                ", total=" + total +
+                '}';
     }
 }

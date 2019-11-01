@@ -41,18 +41,46 @@ public class GameControllerTest {
 
     //a List of Games for testing purposes
     private List<Game> gameList;
+    private List<Game> studioList;
+    private List<Game> titleList;
+    private List<Game> esrbRatingList;
 
     @Before
     public void setUp() throws Exception {
         gameList = new ArrayList<>();
-        gameList.add(new Game(1,"Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
-        gameList.add(new Game(2,"Grand Theft Auto: San Andres", "Mature", "Grand Theft Auto: San Andres is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
-        gameList.add(new Game(3,"Grand Theft Auto: V", "Mature", "Grand Theft Auto: V is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
+        gameList.add(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        gameList.add(new Game(2, "Grand Theft Auto: San Andres", "Mature", "Grand Theft Auto: San Andres is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        gameList.add(new Game(3, "Grand Theft Auto: V", "Mature", "Grand Theft Auto: V is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
 
+        titleList = new ArrayList<>();
+        titleList.add(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        titleList.add(new Game(2, "Grand Theft Auto: San Andres", "Mature", "Grand Theft Auto: San Andres is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        titleList.add(new Game(3, "Grand Theft Auto: V", "Mature", "Grand Theft Auto: V is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+
+        studioList = new ArrayList<>();
+        studioList.add(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        studioList.add(new Game(2, "Grand Theft Auto: San Andres", "Mature", "Grand Theft Auto: San Andres is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        studioList.add(new Game(3, "Grand Theft Auto: V", "Mature", "Grand Theft Auto: V is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+
+        esrbRatingList = new ArrayList<>();
+        esrbRatingList.add(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        esrbRatingList.add(new Game(2, "Grand Theft Auto: San Andres", "Mature", "Grand Theft Auto: San Andres is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        esrbRatingList.add(new Game(3, "Grand Theft Auto: V", "Mature", "Grand Theft Auto: V is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+
+        Game createMockGameObject = new Game("Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20);
         //GET ALL MOCK
         when(gameDao.getAllGames()).thenReturn(gameList);
-        //GET CONSOLE BY ID MOCK
+        //GET GAME BY ID MOCK
         when(gameDao.getGame(1)).thenReturn(gameList.get(0));
+        //CREATE GAME MOCK
+        when(gameDao.addGame(createMockGameObject)).thenReturn(gameList.get(0));
+        //GET GAME BY TITLE MOCK
+        when(gameDao.getAllGamesByTitle("Grand Theft Auto: Vice City")).thenReturn(titleList);
+        //GET GAME BY ESRB_RATING MOCK
+        when(gameDao.getAllGamesByEsrbRating("Mature")).thenReturn(esrbRatingList);
+        //GET GAME BY STUDIO MOCK
+        when(gameDao.getAllGamesByStudio("Rockstar North")).thenReturn(studioList);
+        //UPDATE GAME RETURNS VOID SO NO MOCK POSSIBLE
 
     }
 
@@ -74,8 +102,8 @@ public class GameControllerTest {
 
     //GET BY ID
     @Test
-    public void shouldGetAGameById() throws  Exception {
-        String outputJson = mapper.writeValueAsString(new Game(1,"Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
+    public void shouldGetAGameById() throws Exception {
+        String outputJson = mapper.writeValueAsString(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
         // act
         mockMvc
                 .perform(get("/game/{id}", 1))        // Doing a GET request
@@ -99,9 +127,10 @@ public class GameControllerTest {
 
     //CREATE
     @Test
-    public void shouldCreateGame() throws Exception {
-        String inputJson = mapper.writeValueAsString(new Game(4,"Grand Theft Auto: IV", "Mature", "Grand Theft Auto: IV is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
-        String outputJson = mapper.writeValueAsString(new Game(4,"Grand Theft Auto: IV", "Mature", "Grand Theft Auto: IV is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20));
+    public void shouldCreateANewGame() throws Exception {
+        //arrange
+        String inputJson = mapper.writeValueAsString(new Game( "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
+        String outputJson = mapper.writeValueAsString(new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20));
 
         // act
         mockMvc.perform(
@@ -120,7 +149,7 @@ public class GameControllerTest {
     @Test
     public void shouldUpdateGame() throws Exception {
         // arrange
-        Game inputAndOutputRecordForPut = new Game(1,"Grand Theft Auto: IV", "Mature", "Grand Theft Auto: IV is an action-adventure video game",BigDecimal.valueOf(19.99),"Rockstar North", 20);
+        Game inputAndOutputRecordForPut = new Game(1, "Grand Theft Auto: IV", "Mature", "Grand Theft Auto: IV is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20);
         String inputAndOutputJson = mapper.writeValueAsString(inputAndOutputRecordForPut);
         //String outputJson = mapper.writeValueAsString(inputAndOutRecordForPut);
 
@@ -136,19 +165,43 @@ public class GameControllerTest {
     //GET GAME BY STUDIO
     @Test
     public void shouldGetGameByStudio() throws Exception {
+        // arrange - parameters and the results
+        String outputJson = mapper.writeValueAsString(studioList);
 
+        // act
+        mockMvc
+                .perform(get("/game/studio/{studio}", "Rockstar North"))        // Doing a GET request
+                .andDo(print())                             // We need to print the results
+                .andExpect(status().isOk())    //assert     // This should be OK
+                .andExpect(content().json(outputJson));     // this is what the response should be.
     }
 
     //GET GAME BY ESRB_RATING
     @Test
     public void shouldGetGameByEsrbRating() throws Exception {
+        // arrange - parameters and the results
+        String outputJson = mapper.writeValueAsString(esrbRatingList);
 
+        // act
+        mockMvc
+                .perform(get("/game/esrb_rating/{esrb_rating}", "Mature"))        // Doing a GET request
+                .andDo(print())                             // We need to print the results
+                .andExpect(status().isOk())    //assert     // This should be OK
+                .andExpect(content().json(outputJson));     // this is what the response should be.
     }
 
     //GET GAME BY TITLE
     @Test
     public void shouldGetGameByTitle() throws Exception {
+        // arrange - parameters and the results
+        String outputJson = mapper.writeValueAsString(titleList);
 
+        // act
+        mockMvc
+                .perform(get("/game/title/{title}", "Grand Theft Auto: Vice City"))        // Doing a GET request
+                .andDo(print())                             // We need to print the results
+                .andExpect(status().isOk())    //assert     // This should be OK
+                .andExpect(content().json(outputJson));     // this is what the response should be.
     }
 
 }

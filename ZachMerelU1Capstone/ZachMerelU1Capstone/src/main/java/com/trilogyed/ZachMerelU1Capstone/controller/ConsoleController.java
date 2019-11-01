@@ -29,6 +29,7 @@ public class ConsoleController {
         List<Console> consoles = consoleDao.getAllConsoles();
         return consoles;
     }
+
     //GET BY MANUFACTURER
     @GetMapping("/console/manufacturer/{manufacturer}")
     @ResponseStatus(HttpStatus.OK)
@@ -57,28 +58,23 @@ public class ConsoleController {
     @RequestMapping(value = "/console/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteConsole(@PathVariable int id) {
-      consoleDao.deleteConsole(id);
+        consoleDao.deleteConsole(id);
     }
 
     //UPDATE
     @RequestMapping(value = "/console/{id}", method = RequestMethod.PUT)
-    public Console updateConsoleById(@PathVariable int id, @RequestBody @Valid Console console) {
+    @ResponseStatus(HttpStatus.OK)
+    public void updateConsoleById(@PathVariable int id, @RequestBody @Valid Console console) {
         if (id != console.getConsole_id()) {
             throw new IllegalArgumentException("The id in the path does not equal the id in the request body");
         }
-        for(Console console1 : consoleDao.getAllConsoles()) {
-            if(id == console1.getConsole_id()) {
+        for (Console console1 : consoleDao.getAllConsoles()) {
+            if (id == console1.getConsole_id()) {
                 console.setConsole_id(id);
                 consoleDao.updateConsole(console);
-                return console;
             }
         }
-        return null;
     }
-
-
-
-
 
 
 }

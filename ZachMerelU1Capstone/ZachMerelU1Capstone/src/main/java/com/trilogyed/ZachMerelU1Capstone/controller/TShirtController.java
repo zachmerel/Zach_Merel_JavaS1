@@ -14,10 +14,12 @@ import java.util.List;
 @RestController
 public class TShirtController {
 
-    //GET ALL
+
     @Autowired
     TShirtDao tShirtDao;
 
+
+    //GET ALL
     @GetMapping("/tshirt")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getAllTshirts() {
@@ -45,27 +47,26 @@ public class TShirtController {
     @PostMapping(value = "/tshirt")
     @ResponseStatus(HttpStatus.CREATED)
     public TShirt createNewTShirt(@RequestBody @Valid TShirt tShirt) {
+
         return tShirtDao.addTShirt(tShirt);
     }
 
     //UPDATE
     @RequestMapping(value = "/tshirt/{id}", method = RequestMethod.PUT)
-    public TShirt updateTShirtById(@PathVariable int id, @RequestBody @Valid TShirt tShirt) {
+    public void updateTShirtById(@PathVariable int id, @RequestBody @Valid TShirt tShirt) {
         if (id != tShirt.getT_shirt_id()) {
             throw new IllegalArgumentException("The id in the path does not equal the id in the request body");
         }
-        for(TShirt tShirt1 : tShirtDao.getAllTShirts()) {
-            if(id == tShirt1.getT_shirt_id()) {
+        for (TShirt tShirt1 : tShirtDao.getAllTShirts()) {
+            if (id == tShirt1.getT_shirt_id()) {
                 tShirt.setT_shirt_id(id);
                 tShirtDao.updateTShirt(tShirt);
-                return tShirt;
             }
         }
-        return null;
     }
 
     //GET TSHIRT BY COLOR
-    @GetMapping("/tshirt/{color")//Another way to set the Rest API Get mapping
+    @GetMapping("/tshirt/color/{color}")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getTShirtByColor(@PathVariable String color) {
         List<TShirt> tShirts = tShirtDao.getAllTShirtsByColor(color);
@@ -73,7 +74,7 @@ public class TShirtController {
     }
 
     //GET TSHIRT BY SIZE
-    @GetMapping("/tshirt/{size")//Another way to set the Rest API Get mapping
+    @GetMapping("/tshirt/size/{size}")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getTShirtBySize(@PathVariable String size) {
         List<TShirt> tShirts = tShirtDao.getAllTShirtsBySize(size);

@@ -42,6 +42,8 @@ public class TShirtControllerTest {
 
     //a List of Consoles for testing purposes
     private List<TShirt> tShirtList;
+    private List<TShirt> tShirtSizeList;
+    private List<TShirt> tShirtColorList;
 
     @Before
     public void setUp() throws Exception {
@@ -50,8 +52,27 @@ public class TShirtControllerTest {
         tShirtList.add(new TShirt(2, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
         tShirtList.add(new TShirt(3, "Medium", "Blue", "men's blue tshirt", BigDecimal.valueOf(8.99), 25));
 
+        tShirtSizeList = new ArrayList<>();
+        tShirtSizeList.add(new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
+        tShirtSizeList.add(new TShirt(2, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
+
+        tShirtColorList = new ArrayList<>();
+        tShirtColorList.add(new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
+        tShirtColorList.add(new TShirt(2, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
+
+        TShirt createMockTShirtObject = new TShirt("Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25);
+
+        //GET ALL MOCK
         when(tShirtDao.getAllTShirts()).thenReturn(tShirtList);
+        //GET TSHIRT BY ID MOCK
         when(tShirtDao.getTShirt(1)).thenReturn(tShirtList.get(0));
+        //CREATE TSHIRT MOCK
+        when(tShirtDao.addTShirt(createMockTShirtObject)).thenReturn(tShirtList.get(0));
+        //GET TSHIRT BY SIZE MOCK
+        when(tShirtDao.getAllTShirtsBySize("Large")).thenReturn(tShirtSizeList);
+        //GET TSHIRT BY COLOR MOCK
+        when(tShirtDao.getAllTShirtsByColor("Black")).thenReturn(tShirtColorList);
+        //UPDATE CONSOLE RETURNS VOID SO NO MOCK POSSIBLE
 
     }
 
@@ -100,16 +121,16 @@ public class TShirtControllerTest {
     @Test
     public void shouldUpdateATshirt() throws Exception {
         // arrange
-        TShirt inputAndOutputRecordForPut = new TShirt(1, "X-Large", "Red", "men's red tshirt", BigDecimal.valueOf(8.99), 25);
-        String inputAndOutputJson = mapper.writeValueAsString(inputAndOutputRecordForPut);
+        TShirt inputTShirtForPut = new TShirt(1, "X-Large", "Red", "men's red tshirt", BigDecimal.valueOf(8.99), 25);
+        String inputJson = mapper.writeValueAsString(inputTShirtForPut);
 
         mockMvc.perform(
                 put("/tshirt/{id}", 1)     // act
-                        .content(inputAndOutputJson)
+                        .content(inputJson)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())                 // assert
-                .andExpect(content().json(inputAndOutputJson));
+                .andExpect(status().isOk());                 // assert
+
     }
 
     //CREATE
@@ -117,8 +138,8 @@ public class TShirtControllerTest {
     public void shouldCreateATShirt() throws Exception {
         //arrange
 
-        String inputJson = mapper.writeValueAsString(new TShirt(4, "X-Large", "Red", "men's red tshirt", BigDecimal.valueOf(8.99), 25));
-        String outputJson = mapper.writeValueAsString(new TShirt(4, "X-Large", "Red", "men's red tshirt", BigDecimal.valueOf(8.99), 25));
+        String inputJson = mapper.writeValueAsString(new TShirt("Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
+        String outputJson = mapper.writeValueAsString(new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25));
 
         // act
         mockMvc.perform(
@@ -137,12 +158,30 @@ public class TShirtControllerTest {
     //GET TSHIRT BY SIZE
     @Test
     public void shouldGetTShirtBySize() throws Exception {
+        // arrange - parameters and the results
+        String outputJson = mapper.writeValueAsString(tShirtSizeList);
+
+        // act
+        mockMvc
+                .perform(get("/tshirt/size/{size}", "Large"))        // Doing a GET request
+                .andDo(print())                             // We need to print the results
+                .andExpect(status().isOk())    //assert     // This should be OK
+                .andExpect(content().json(outputJson));     // this is what the response should be.
 
     }
 
     //GET TSHIRT BY COLOR
     @Test
     public void shouldGetTShirtByColor() throws Exception {
+        // arrange - parameters and the results
+        String outputJson = mapper.writeValueAsString(tShirtColorList);
+
+        // act
+        mockMvc
+                .perform(get("/tshirt/color/{color}", "Black"))        // Doing a GET request
+                .andDo(print())                             // We need to print the results
+                .andExpect(status().isOk())    //assert     // This should be OK
+                .andExpect(content().json(outputJson));     // this is what the response should be.
 
     }
 
