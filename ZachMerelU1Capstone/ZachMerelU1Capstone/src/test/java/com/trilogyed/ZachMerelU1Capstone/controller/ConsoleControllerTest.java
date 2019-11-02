@@ -4,6 +4,7 @@ package com.trilogyed.ZachMerelU1Capstone.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trilogyed.ZachMerelU1Capstone.dao.ConsoleDao;
 import com.trilogyed.ZachMerelU1Capstone.model.Console;
+import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class ConsoleControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ConsoleDao consoleDao;
+    private InvoiceServiceLayer invoiceServiceLayer;
 
     // ObjectMapper used to convert Java objects to JSON and vice versa
     private ObjectMapper mapper = new ObjectMapper();
@@ -55,16 +56,21 @@ public class ConsoleControllerTest {
         manufacturerList.add(new Console(2, "PlayStation 3", "Sony", "25gb", "Sony2008", BigDecimal.valueOf(299.99), 50));
         manufacturerList.add(new Console(3, "PlayStation 4", "Sony", "500gb", "Sony2012", BigDecimal.valueOf(349.99), 125));
 
+        Console consoleMissingManufacturer = new Console(1, "Playstation 2", "", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
+
         Console createMockConsoleObject = new Console("PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
         //GET ALL MOCK
-        when(consoleDao.getAllConsoles()).thenReturn(consoleList);
+        when(invoiceServiceLayer.getAllConsoles()).thenReturn(consoleList);
         //GET CONSOLE BY ID MOCK
-        when(consoleDao.getConsole(1)).thenReturn(consoleList.get(0));
+        when(invoiceServiceLayer.getConsole(1)).thenReturn(consoleList.get(0));
         //CREATE CONSOLE MOCK
-        when(consoleDao.addConsole(createMockConsoleObject)).thenReturn(consoleList.get(0));
+        when(invoiceServiceLayer.addConsole(createMockConsoleObject)).thenReturn(consoleList.get(0));
+        //INVALID CREATE CONSOLE MOCK
+        when(invoiceServiceLayer.addConsole(consoleMissingManufacturer)).thenReturn(consoleMissingManufacturer);
         //GET CONSOLE BY MANUFACTURER MOCK
-        when(consoleDao.getAllConsolesByManufacturer("Sony")).thenReturn(manufacturerList);
+        when(invoiceServiceLayer.getAllConsolesByManufacturer("Sony")).thenReturn(manufacturerList);
         //UPDATE CONSOLE RETURNS VOID SO NO MOCK POSSIBLE
+
 
     }
 
@@ -156,6 +162,41 @@ public class ConsoleControllerTest {
                 .andExpect(status().isOk())    //assert     // This should be OK
                 .andExpect(content().json(outputJson));     // this is what the response should be.
 
+    }
+
+    @Test
+    public void shouldHandle422WhenWeEnterInvalidConsole() throws Exception {
+        // arrange
+        String inputJson = mapper.writeValueAsString(new Console(1, "Playstation 2", "", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25));
+        String expectedMessage = "You MUST supply a manufacturer for console.";
+
+        //        // act
+        mockMvc.perform(
+                post("/console")                    //perform the post
+                        .content(inputJson)                         // set the request body
+                        .contentType(MediaType.APPLICATION_JSON)    // add the header (Postman helps us with this when we
+                //                 use Postman)
+        )
+                .andDo(print())                                 // print the output
+                .andExpect(status().isUnprocessableEntity())   //assert     // we should have gotten back a 201 - created
+                .andExpect(content().string(containsString(expectedMessage)));
+
+    }
+
+    @Test
+    public void shouldGive422Status_whenIdInPathDoesNotMatchIdInRequestBody() throws Exception {
+        // arrange
+        Console inputAndOutputConsoleForPut = new Console(1, "", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
+        String inputJson = mapper.writeValueAsString(inputAndOutputConsoleForPut);
+        String expectedMessage = "The id in the path does not equal the id in the request body";
+
+        mockMvc.perform(
+                put("/console/{id}", 3)     // act
+                        .content(inputJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())                 // assert
+                .andExpect(content().string(containsString(expectedMessage)));
     }
 
 

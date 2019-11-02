@@ -1,7 +1,9 @@
 package com.trilogyed.ZachMerelU1Capstone.controller;
 
 
+import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
 import com.trilogyed.ZachMerelU1Capstone.exception.NotFoundException;
+import com.trilogyed.ZachMerelU1Capstone.exception.OrderToManyException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.mediatype.vnderrors.VndErrors;
 import org.springframework.http.HttpStatus;
@@ -73,6 +75,22 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(value = {NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<VndErrors> notFoundException(NotFoundException e, WebRequest request) {
+        VndErrors error = new VndErrors(request.toString(), "Not found : " + e.getMessage());
+        ResponseEntity<VndErrors> responseEntity = new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return responseEntity;
+    }
+
+    @ExceptionHandler(value = {OrderToManyException.class})
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public ResponseEntity<VndErrors> OrderToManyException(OrderToManyException e, WebRequest request) {
+        VndErrors error = new VndErrors(request.toString(), "Not found : " + e.getMessage());
+        ResponseEntity<VndErrors> responseEntity = new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+        return responseEntity;
+    }
+
+    @ExceptionHandler(value = {InvalidStateException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<VndErrors> notFoundException(InvalidStateException e, WebRequest request) {
         VndErrors error = new VndErrors(request.toString(), "Not found : " + e.getMessage());
         ResponseEntity<VndErrors> responseEntity = new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         return responseEntity;

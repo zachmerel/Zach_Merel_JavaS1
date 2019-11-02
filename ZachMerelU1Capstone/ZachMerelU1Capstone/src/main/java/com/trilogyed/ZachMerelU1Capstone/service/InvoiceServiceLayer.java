@@ -1,6 +1,8 @@
 package com.trilogyed.ZachMerelU1Capstone.service;
 
 import com.trilogyed.ZachMerelU1Capstone.dao.*;
+import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
+import com.trilogyed.ZachMerelU1Capstone.exception.OrderToManyException;
 import com.trilogyed.ZachMerelU1Capstone.model.*;
 import com.trilogyed.ZachMerelU1Capstone.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,34 +22,17 @@ public class InvoiceServiceLayer {
     private ProcessingFeeDao processingFeeDao;
     private TaxesDao taxesDao;
     private TShirtDao tShirtDao;
+    private InvoiceDao invoiceDao;
 
     @Autowired
-    public InvoiceServiceLayer(ConsoleDao consoleDao, GameDao gameDao, ProcessingFeeDao processingFeeDao, TaxesDao taxesDao, TShirtDao tShirtDao) {
+    public InvoiceServiceLayer(ConsoleDao consoleDao, GameDao gameDao, ProcessingFeeDao processingFeeDao, TaxesDao taxesDao, TShirtDao tShirtDao, InvoiceDao invoiceDao) {
         this.consoleDao = consoleDao;
         this.gameDao = gameDao;
         this.processingFeeDao = processingFeeDao;
         this.taxesDao = taxesDao;
         this.tShirtDao = tShirtDao;
+        this.invoiceDao = invoiceDao;
     }
-//===============================================================================
-    // in the ACTUAL SERVICE LAYER
-//    public InvoiceViewModel makeAPurchase(InputObject inputObject) {
-//        InvoiceVIewModel returnVal = new InvoiceViewModel();
-//        if (inputObject.getType().equals("game")) {
-//            // get the game from the dao
-//        } else if (inputObject.getType().equals("console")) {
-//            //get the console from the dao
-//        } else {
-//            // get the tshirt from the dao
-//        }
-//        // figure out how to get the state
-//        // figure out how to get the total cost
-//        returnVal.setTax(calculateTax(inputObject.getState(), /* total cost*/));
-//        // figure out the inputs for the processing fee
-//        returnVal.setProcessingFee(calculateProcessingFee(...));
-//    }
-//===============================================================================================
-
 
     public InvoiceViewModel makeAPurchase(InputObject inputObject) {
 
@@ -60,7 +45,6 @@ public class InvoiceServiceLayer {
         returnVal.setState(inputObject.getState());
         returnVal.setZipcode(inputObject.getZipcode());
         returnVal.setItem_type(inputObject.getItem_type());
-//        returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(),inputObject.getQuantity()));
 
         BigDecimal unitPrice;
         if (inputObject.getItem_type().equalsIgnoreCase("Game")) {
@@ -72,7 +56,7 @@ public class InvoiceServiceLayer {
             returnVal.setUnit_price(unitPrice);
             returnVal.setSubtotal(unitPrice.multiply(new BigDecimal(inputObject.getQuantity())));
             returnVal.setTax(calculateSalesTax(inputObject.getState(), returnVal.getSubtotal()));
-            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(),inputObject.getQuantity()));
+            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(), inputObject.getQuantity()));
             returnVal.setTotal(returnVal.getTax().add((returnVal.getSubtotal().add(returnVal.getProcessing_fee()))));
         } else if (inputObject.getItem_type().equalsIgnoreCase("Console")) {
             returnVal.setConsole(consoleDao.getConsole(inputObject.getItem_id()));
@@ -82,7 +66,7 @@ public class InvoiceServiceLayer {
             unitPrice = console.getPrice();
             returnVal.setUnit_price(unitPrice);
             returnVal.setSubtotal(unitPrice.multiply(new BigDecimal(inputObject.getQuantity())));
-            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(),inputObject.getQuantity()));
+            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(), inputObject.getQuantity()));
             returnVal.setTax(calculateSalesTax(inputObject.getState(), returnVal.getSubtotal()));
 
             returnVal.setTotal(returnVal.getTax().add((returnVal.getSubtotal().add(returnVal.getProcessing_fee()))));
@@ -95,19 +79,10 @@ public class InvoiceServiceLayer {
             returnVal.setUnit_price(unitPrice);
             returnVal.setSubtotal(unitPrice.multiply(new BigDecimal(inputObject.getQuantity())));
             returnVal.setTax(calculateSalesTax(inputObject.getState(), returnVal.getSubtotal()));
-            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(),inputObject.getQuantity()));
+            returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(), inputObject.getQuantity()));
             returnVal.setTotal(returnVal.getTax().add((returnVal.getSubtotal().add(returnVal.getProcessing_fee()))));
         }
 
-
-//        Sales tax applies only to the cost of the items.
-//        Sales tax does not apply to any processing fees for an invoice.
-//        The processing fee is applied only once per order regardless of the number of items in the order unless the number of items on the order is greater than 10 in which case an additional processing fee of $15.49 is applied to the order.
-//        The order process logic must properly update the quantity on hand for the item in the order.
-//        Order quantity must be greater than zero.
-//        Order quantity must be less than or equal to the number of items on hand in inventory.
-//        Order must contain a valid state code.
-//        The REST API must properly handle and report all violations of business rules.
         return returnVal;
     }
 
@@ -126,182 +101,225 @@ public class InvoiceServiceLayer {
         ProcessingFee processingFee = processingFeeDao.getProcessingFee(product_type);
         BigDecimal fee = processingFee.getFee();
         BigDecimal additionProcessingFee = new BigDecimal(15.49);
-        if(quantity > 10){
+        if (quantity > 10) {
             return (additionProcessingFee.add(fee)).setScale(2, RoundingMode.HALF_DOWN);
-        }else{
+        } else {
             return fee;
         }
 
     }
 
     //UPDATES THE QUANTITY OF ITEM(4)
-//    public void updateOrderQuantity(){
-//
-//    }
+    public int updateInventoryQuantity(int quantityToPurchase, int product_id, String product_type) {
+        if (product_type.equalsIgnoreCase("Game")) {
+            int gameItemQuantity = gameDao.getGame(product_id).getQuantity();
+            int updatedGameItemQuantity = gameItemQuantity - quantityToPurchase;
+            if (updatedGameItemQuantity >= 0) {
+                gameDao.getGame(product_id).setQuantity(updatedGameItemQuantity);
+                return gameDao.getGame(product_id).getQuantity();
+            } else {
+                throw new OrderToManyException();
+            }
+        } else if (product_type.equalsIgnoreCase("Console")) {
+            int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
+            int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
+            if (updatedConsoleItemQuantity >= 0) {
+                consoleDao.getConsole(product_id).setQuantity(updatedConsoleItemQuantity);
+                return consoleDao.getConsole(product_id).getQuantity();
+            } else {
+                throw new OrderToManyException();
+            }
+        } else if (product_type.equalsIgnoreCase("TShirt")) {
+            int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
+            int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
+            if (updatedConsoleItemQuantity >= 0) {
+                tShirtDao.getTShirt(product_id).setQuantity(updatedConsoleItemQuantity);
+                return tShirtDao.getTShirt(product_id).getQuantity();
+            } else {
+                throw new OrderToManyException();
+            }
+        } else {
+            return 1;
+        }
+    }
 
-    //ENSURES ORDER QUANTITY IS GREATER THAN 0 (5)
-//    public boolean ensureOrderQuantityIsGreaterThanZero(){
-//
-//    }
 
-    //ORDER QUANTITY GREAT THAN OR EQUAL NUMBER OF INVENTORY ON HAND(6)
-//    public void ensureOrderQuantityGreaterThanNumberOfInventoryOnHand() {
-//
-//    }
+    //ORDER QUANTITY LESS THAN OR EQUAL NUMBER OF INVENTORY ON HAND(6)
+    public boolean ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(int quantityToPurchase, String product_type, int product_id) {
+        if (product_type.equalsIgnoreCase("Game")) {
+            if (quantityToPurchase <= gameDao.getGame(product_id).getQuantity()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (product_type.equalsIgnoreCase("Console")) {
+            if (quantityToPurchase <= consoleDao.getConsole(product_id).getQuantity()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (product_type.equalsIgnoreCase("TShirt")) {
+            if (quantityToPurchase <= tShirtDao.getTShirt(product_id).getQuantity()) {
+                return true;
+            } else {
+                return false;
+            }
 
-    //CHECK FOR VALID STATE CODE(7)
-//    public boolean checkForStateCode(){
-//        return
-//    }
+        }
 
-//    @Transactional
-//    public InvoiceViewModel saveInvoice(InvoiceViewModel invoiceViewModel){
-//        Invoice invoice = new Invoice();
-//        invoice.setName(invoiceViewModel.getName());
-//        invoice.setStreet(invoiceViewModel.getStreet());
-//        invoice.setCity(invoiceViewModel.getCity());
-//        invoice.setZipcode(invoiceViewModel.getZipcode());
-//        invoice.setItem_type(invoiceViewModel.getItem_type());
-//        //NEED GAME/CONSOLE/TSHIRT HERE?
-//
-//
-//    }
+        return false;
+    }
+
+
+    //            //CHECK FOR VALID STATE CODE(7)
+    public boolean checkForStateCode(String state) throws InvalidStateException {
+        if (taxesDao.getTaxRate(state).getState().length() > 1) {
+            return true;
+        } else {
+            throw new InvalidStateException();
+        }
+
+    }
+
+    //SAVES INVOCIE TO DATABASE
+    @Transactional
+    public Invoice saveInvoice(InvoiceViewModel invoiceViewModel) {
+        Invoice invoice = new Invoice();
+        invoice.setName(invoiceViewModel.getName());
+        invoice.setStreet(invoiceViewModel.getStreet());
+        invoice.setCity(invoiceViewModel.getCity());
+        invoice.setZipcode(invoiceViewModel.getZipcode());
+        invoice.setItem_type(invoiceViewModel.getItem_type());
+        if (invoice.getItem_type().equalsIgnoreCase("Game")) {
+            invoice.setItem_id(invoiceViewModel.getGame().getGame_id());
+            invoice.setQuantity(invoiceViewModel.getGame().getQuantity());
+            invoice.setUnit_price(invoiceViewModel.getUnit_price());
+        } else if ((invoice.getItem_type().equalsIgnoreCase("Console"))) {
+            invoice.setItem_id(invoiceViewModel.getConsole().getConsole_id());
+            invoice.setQuantity(invoiceViewModel.getConsole().getQuantity());
+            invoice.setUnit_price(invoiceViewModel.getUnit_price());
+        } else if ((invoice.getItem_type().equalsIgnoreCase("TShirt"))) {
+            invoice.setItem_id(invoiceViewModel.gettShirt().getT_shirt_id());
+            invoice.setQuantity(invoiceViewModel.gettShirt().getQuantity());
+            invoice.setUnit_price(invoiceViewModel.getUnit_price());
+        }
+        invoice.setSubtotal(invoiceViewModel.getSubtotal());
+        invoice.setTax(invoiceViewModel.getTax());
+        invoice.setProcessing_fee(invoiceViewModel.getProcessing_fee());
+        invoice.setTotal(invoiceViewModel.getTotal());
+
+       invoice = invoiceDao.addInvoice(invoice);
+//       invoice.setId(invoice.getId());
+       return invoice;
+    }
+
+
+//            Console API
+
+    public Console addConsole(Console console) {
+        return consoleDao.addConsole(console);
+    }
+
+    public Console getConsole(int id) {
+        return consoleDao.getConsole(id);
+    }
+
+    public List<Console> getAllConsoles() {
+        return consoleDao.getAllConsoles();
+    }
+
+    public List<Console> getAllConsolesByManufacturer(String manufacturer) {
+        return consoleDao.getAllConsolesByManufacturer(manufacturer);
+    }
+
+    public void updateConsole(Console console) {
+        consoleDao.updateConsole(console);
+    }
+
+    public void deleteConsole(int id) {
+        consoleDao.deleteConsole(id);
+    }
+    //
+    // Game API
+    //
+
+    public Game addGame(Game game) {
+        return gameDao.addGame(game);
+    }
+
+    public Game getGame(int id) {
+        return gameDao.getGame(id);
+    }
+
+    public List<Game> getAllGames() {
+        return gameDao.getAllGames();
+    }
+
+    public List<Game> getAllGamesByStudio(String studio) {
+        return gameDao.getAllGamesByStudio(studio);
+    }
+
+    public List<Game> getAllGamesByEsrbRating(String esrb_rating) {
+        return gameDao.getAllGamesByEsrbRating(esrb_rating);
+    }
+
+    public List<Game> getAllGamesByTitle(String title) {
+        return gameDao.getAllGamesByTitle(title);
+    }
+
+    public void updateGame(Game game) {
+        gameDao.updateGame(game);
+    }
+
+    public void deleteGame(int id) {
+        gameDao.deleteGame(id);
+    }
 
     //
-    //Console API
+    // TSHIRT API
     //
-//    public Console addConsole(Console console) {
-//        return consoleDao.addConsole(console);
-//    }
-//
-//    public Console getConsole(int id) {
-//        return consoleDao.getConsole(id);
-//    }
-//
-//    public List<Console> getAllConsoles() {
-//        return consoleDao.getAllConsoles();
-//    }
-//
-//    public List<Console> getAllConsolesByManufacturer(String manufacturer) {
-//        return consoleDao.getAllConsolesByManufacturer(manufacturer);
-//    }
-//
-//    public void updateConsole(Console console) {
-//        consoleDao.updateConsole(console);
-//    }
-//
-//    public void deleteConsole(int id) {
-//        consoleDao.deleteConsole(id);
-//    }
-//    //
-//    // Game API
-//    //
-//
-//    public Game addGame(Game game) {
-//        return gameDao.addGame(game);
-//    }
-//
-//    public Game getGame(int id) {
-//        return gameDao.getGame(id);
-//    }
-//
-//    public List<Game> getAllGames() {
-//        return gameDao.getAllGames();
-//    }
-//
-//    public List<Game> getAllGamesByStudio(String studio) {
-//        return gameDao.getAllGamesByStudio(studio);
-//    }
-//
-//    public List<Game> getAllGamesByEsrbRating(String esrb_rating) {
-//        return gameDao.getAllGamesByEsrbRating(esrb_rating);
-//    }
-//
-//    public List<Game> getAllGamesByTitle(String title) {
-//        return gameDao.getAllGamesByTitle(title);
-//    }
-//
-//    public void updateGame(Game game) {
-//        gameDao.updateGame(game);
-//    }
-//
-//    public void deleteGame(int id) {
-//        gameDao.deleteGame(id);
-//    }
-//
-//    //
-//    // TSHIRT API
-//    //
-//
-//    public TShirt addTShirt(TShirt tShirt) {
-//        return tShirtDao.addTShirt(tShirt);
-//    }
-//
-//    public TShirt getTShirt(int id) {
-//        return tShirtDao.getTShirt(id);
-//    }
-//
-//    public List<TShirt> getAllTShirts() {
-//        return tShirtDao.getAllTShirts();
-//    }
-//
-//    public List<TShirt> getAllTShirtsByColor(String color) {
-//        return tShirtDao.getAllTShirtsByColor(color);
-//    }
-//
-//    public List<TShirt> getAllTShirtsBySize(String size) {
-//        return tShirtDao.getAllTShirtsBySize(size);
-//    }
-//
-//    public void updateTShirt(TShirt tShirt) {
-//        tShirtDao.updateTShirt(tShirt);
-//    }
-//
-//    public void deleteTShirt(int id) {
-//        tShirtDao.deleteTShirt(id);
-//    }
-//    //
-//    // PROCESSING FEE API
-//    //
-//
-//    public ProcessingFee getProcessingFee(String product_type) {
-//        return processingFeeDao.getProcessingFee(product_type);
-//    }
-//    //
-//    //SALES TAX RATE API
-//    //
-//
-//    public StateTaxRate getTaxRate(String state) {
-//        return taxesDao.getTaxRate(state);
-//    }
-//
-//
-//    private InvoiceViewModel buildInvoiceViewModel(Invoice invoice) {
-//
-//
-//        InvoiceViewModel invoiceViewModel = new InvoiceViewModel();
-//        invoiceViewModel.setInvoice_id(invoice.getId());
-//        invoiceViewModel.setName(invoice.getName());
-//        invoiceViewModel.setStreet(invoice.getStreet());
-//        invoiceViewModel.setCity(invoice.getCity());
-//        invoiceViewModel.setState(invoice.getState());
-//        invoiceViewModel.setZipcode(invoice.getZipcode());
-//        invoiceViewModel.setItem_type(invoice.getItem_type());
-//        invoiceViewModel.setUnit_price(invoice.getUnit_price());
-//        invoiceViewModel.setSubtotal(invoice.getSubtotal());
-//        invoiceViewModel.setTax(invoice.getTax());
-//        invoiceViewModel.setProcessing_fee(invoice.getProcessing_fee());
-//        invoiceViewModel.setTotal(invoice.getTotal());
-//
-//        Console console = consoleDao.getConsole(invoice.getConsoleId());
-//        invoiceViewModel.setConsoleId(console.getConsole_id());
-//
-//        Game game = gameDao.getGame(invoice.getGameId());
-//        invoiceViewModel.setGameId(game.getGame_id());
-//
-//        TShirt tShirt = tShirtDao.getTShirt(invoice.gettShirtId());
-//        invoiceViewModel.settShirtId(tShirt.getT_shirt_id());
-//
-//        return invoiceViewModel;
-//    }
+
+    public TShirt addTShirt(TShirt tShirt) {
+        return tShirtDao.addTShirt(tShirt);
+    }
+
+    public TShirt getTShirt(int id) {
+        return tShirtDao.getTShirt(id);
+    }
+
+    public List<TShirt> getAllTShirts() {
+        return tShirtDao.getAllTShirts();
+    }
+
+    public List<TShirt> getAllTShirtsByColor(String color) {
+        return tShirtDao.getAllTShirtsByColor(color);
+    }
+
+    public List<TShirt> getAllTShirtsBySize(String size) {
+        return tShirtDao.getAllTShirtsBySize(size);
+    }
+
+    public void updateTShirt(TShirt tShirt) {
+        tShirtDao.updateTShirt(tShirt);
+    }
+
+    public void deleteTShirt(int id) {
+        tShirtDao.deleteTShirt(id);
+    }
+    //
+    // PROCESSING FEE API
+    //
+
+    public ProcessingFee getProcessingFee(String product_type) {
+        return processingFeeDao.getProcessingFee(product_type);
+    }
+    //
+    //SALES TAX RATE API
+    //
+
+    public StateTaxRate getTaxRate(String state) {
+        return taxesDao.getTaxRate(state);
+    }
+
+
 }

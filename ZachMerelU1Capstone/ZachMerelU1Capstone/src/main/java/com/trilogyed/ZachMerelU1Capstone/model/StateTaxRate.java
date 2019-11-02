@@ -1,10 +1,12 @@
 package com.trilogyed.ZachMerelU1Capstone.model;
 
+import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class StateTaxRate {
 
+    @NotEmpty
     private String state;
     private BigDecimal rate;
 

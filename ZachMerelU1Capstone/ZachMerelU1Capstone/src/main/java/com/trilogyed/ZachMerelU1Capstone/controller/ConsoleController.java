@@ -1,23 +1,21 @@
 package com.trilogyed.ZachMerelU1Capstone.controller;
 
-import com.trilogyed.ZachMerelU1Capstone.dao.ConsoleDao;
-import com.trilogyed.ZachMerelU1Capstone.exception.NotFoundException;
 import com.trilogyed.ZachMerelU1Capstone.model.Console;
 //import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
+import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
 public class ConsoleController {
 
     @Autowired
-    ConsoleDao consoleDao;
+    InvoiceServiceLayer invoiceServiceLayer;
 
 //    @Autowired
 //    InvoiceServiceLayer invoiceServiceLayer;
@@ -26,7 +24,7 @@ public class ConsoleController {
     @GetMapping("/console")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<Console> getAllConsoles() {
-        List<Console> consoles = consoleDao.getAllConsoles();
+        List<Console> consoles = invoiceServiceLayer.getAllConsoles();
         return consoles;
     }
 
@@ -34,7 +32,7 @@ public class ConsoleController {
     @GetMapping("/console/manufacturer/{manufacturer}")
     @ResponseStatus(HttpStatus.OK)
     public List<Console> getAllConsolesByManufacturer(@PathVariable String manufacturer) {
-        List<Console> consoles = consoleDao.getAllConsolesByManufacturer(manufacturer);
+        List<Console> consoles = invoiceServiceLayer.getAllConsolesByManufacturer(manufacturer);
         return consoles;
     }
 
@@ -42,7 +40,7 @@ public class ConsoleController {
     @GetMapping("/console/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Console getConsoleById(@PathVariable int id) {
-        Console console = consoleDao.getConsole(id);
+        Console console = invoiceServiceLayer.getConsole(id);
         return console;
     }
 
@@ -51,14 +49,14 @@ public class ConsoleController {
     @PostMapping(value = "/console")
     @ResponseStatus(HttpStatus.CREATED)
     public Console createNewConsole(@RequestBody @Valid Console console) {
-        return consoleDao.addConsole(console);
+        return invoiceServiceLayer.addConsole(console);
     }
 
     //DELETE
     @RequestMapping(value = "/console/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteConsole(@PathVariable int id) {
-        consoleDao.deleteConsole(id);
+        invoiceServiceLayer.deleteConsole(id);
     }
 
     //UPDATE
@@ -68,10 +66,10 @@ public class ConsoleController {
         if (id != console.getConsole_id()) {
             throw new IllegalArgumentException("The id in the path does not equal the id in the request body");
         }
-        for (Console console1 : consoleDao.getAllConsoles()) {
+        for (Console console1 : invoiceServiceLayer.getAllConsoles()) {
             if (id == console1.getConsole_id()) {
                 console.setConsole_id(id);
-                consoleDao.updateConsole(console);
+                invoiceServiceLayer.updateConsole(console);
             }
         }
     }

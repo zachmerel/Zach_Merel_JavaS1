@@ -13,9 +13,7 @@ public class Invoice {
     private String state;
     private String zipcode;
     private String item_type;
-    private int  consoleId;
-    private int tShirtId;
-    private int gameId;
+    private int item_id;
     private int quantity;
     private BigDecimal unit_price;
     private BigDecimal subtotal;
@@ -79,28 +77,12 @@ public class Invoice {
         this.item_type = item_type;
     }
 
-    public int getConsoleId() {
-        return consoleId;
+    public int getItem_id() {
+        return item_id;
     }
 
-    public void setConsoleId(int consoleId) {
-        this.consoleId = consoleId;
-    }
-
-    public int gettShirtId() {
-        return tShirtId;
-    }
-
-    public void settShirtId(int tShirtId) {
-        this.tShirtId = tShirtId;
-    }
-
-    public int getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    public void setItem_id(int item_id) {
+        this.item_id = item_id;
     }
 
     public BigDecimal getUnit_price() {
@@ -157,9 +139,7 @@ public class Invoice {
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
         return id == invoice.id &&
-                consoleId == invoice.consoleId &&
-                tShirtId == invoice.tShirtId &&
-                gameId == invoice.gameId &&
+                item_id == invoice.item_id &&
                 quantity == invoice.quantity &&
                 name.equals(invoice.name) &&
                 street.equals(invoice.street) &&
@@ -176,6 +156,6 @@ public class Invoice {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, street, city, state, zipcode, item_type, consoleId, tShirtId, gameId, quantity, unit_price, subtotal, tax, processing_fee, total);
+        return Objects.hash(id, name, street, city, state, zipcode, item_type,item_id, quantity, unit_price, subtotal, tax, processing_fee, total);
     }
 }

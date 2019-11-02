@@ -4,6 +4,7 @@ import com.trilogyed.ZachMerelU1Capstone.dao.ConsoleDao;
 import com.trilogyed.ZachMerelU1Capstone.dao.TShirtDao;
 import com.trilogyed.ZachMerelU1Capstone.model.Console;
 import com.trilogyed.ZachMerelU1Capstone.model.TShirt;
+import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ public class TShirtController {
 
 
     @Autowired
-    TShirtDao tShirtDao;
+    InvoiceServiceLayer invoiceServiceLayer;
 
 
     //GET ALL
     @GetMapping("/tshirt")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getAllTshirts() {
-        List<TShirt> tShirts = tShirtDao.getAllTShirts();
+        List<TShirt> tShirts = invoiceServiceLayer.getAllTShirts();
         return tShirts;
     }
 
@@ -32,7 +33,7 @@ public class TShirtController {
     @GetMapping("/tshirt/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TShirt getTShirtById(@PathVariable int id) {
-        TShirt tShirt = tShirtDao.getTShirt(id);
+        TShirt tShirt = invoiceServiceLayer.getTShirt(id);
         return tShirt;
     }
 
@@ -40,7 +41,7 @@ public class TShirtController {
     @RequestMapping(value = "/tshirt/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTShirt(@PathVariable int id) {
-        tShirtDao.deleteTShirt(id);
+        invoiceServiceLayer.deleteTShirt(id);
     }
 
     //CREATE
@@ -48,7 +49,7 @@ public class TShirtController {
     @ResponseStatus(HttpStatus.CREATED)
     public TShirt createNewTShirt(@RequestBody @Valid TShirt tShirt) {
 
-        return tShirtDao.addTShirt(tShirt);
+        return invoiceServiceLayer.addTShirt(tShirt);
     }
 
     //UPDATE
@@ -57,10 +58,10 @@ public class TShirtController {
         if (id != tShirt.getT_shirt_id()) {
             throw new IllegalArgumentException("The id in the path does not equal the id in the request body");
         }
-        for (TShirt tShirt1 : tShirtDao.getAllTShirts()) {
+        for (TShirt tShirt1 : invoiceServiceLayer.getAllTShirts()) {
             if (id == tShirt1.getT_shirt_id()) {
                 tShirt.setT_shirt_id(id);
-                tShirtDao.updateTShirt(tShirt);
+                invoiceServiceLayer.updateTShirt(tShirt);
             }
         }
     }
@@ -69,7 +70,7 @@ public class TShirtController {
     @GetMapping("/tshirt/color/{color}")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getTShirtByColor(@PathVariable String color) {
-        List<TShirt> tShirts = tShirtDao.getAllTShirtsByColor(color);
+        List<TShirt> tShirts = invoiceServiceLayer.getAllTShirtsByColor(color);
         return tShirts;
     }
 
@@ -77,7 +78,7 @@ public class TShirtController {
     @GetMapping("/tshirt/size/{size}")//Another way to set the Rest API Get mapping
     @ResponseStatus(HttpStatus.OK)
     public List<TShirt> getTShirtBySize(@PathVariable String size) {
-        List<TShirt> tShirts = tShirtDao.getAllTShirtsBySize(size);
+        List<TShirt> tShirts = invoiceServiceLayer.getAllTShirtsBySize(size);
         return tShirts;
     }
 }

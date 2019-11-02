@@ -1,10 +1,8 @@
 package com.trilogyed.ZachMerelU1Capstone.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trilogyed.ZachMerelU1Capstone.dao.ConsoleDao;
-import com.trilogyed.ZachMerelU1Capstone.dao.GameDao;
-import com.trilogyed.ZachMerelU1Capstone.model.Console;
 import com.trilogyed.ZachMerelU1Capstone.model.Game;
+import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +32,7 @@ public class GameControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GameDao gameDao;
+    private InvoiceServiceLayer invoiceServiceLayer;
 
     // ObjectMapper used to convert Java objects to JSON and vice versa
     private ObjectMapper mapper = new ObjectMapper();
@@ -69,17 +67,17 @@ public class GameControllerTest {
 
         Game createMockGameObject = new Game("Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(19.99), "Rockstar North", 20);
         //GET ALL MOCK
-        when(gameDao.getAllGames()).thenReturn(gameList);
+        when(invoiceServiceLayer.getAllGames()).thenReturn(gameList);
         //GET GAME BY ID MOCK
-        when(gameDao.getGame(1)).thenReturn(gameList.get(0));
+        when(invoiceServiceLayer.getGame(1)).thenReturn(gameList.get(0));
         //CREATE GAME MOCK
-        when(gameDao.addGame(createMockGameObject)).thenReturn(gameList.get(0));
+        when(invoiceServiceLayer.addGame(createMockGameObject)).thenReturn(gameList.get(0));
         //GET GAME BY TITLE MOCK
-        when(gameDao.getAllGamesByTitle("Grand Theft Auto: Vice City")).thenReturn(titleList);
+        when(invoiceServiceLayer.getAllGamesByTitle("Grand Theft Auto: Vice City")).thenReturn(titleList);
         //GET GAME BY ESRB_RATING MOCK
-        when(gameDao.getAllGamesByEsrbRating("Mature")).thenReturn(esrbRatingList);
+        when(invoiceServiceLayer.getAllGamesByEsrbRating("Mature")).thenReturn(esrbRatingList);
         //GET GAME BY STUDIO MOCK
-        when(gameDao.getAllGamesByStudio("Rockstar North")).thenReturn(studioList);
+        when(invoiceServiceLayer.getAllGamesByStudio("Rockstar North")).thenReturn(studioList);
         //UPDATE GAME RETURNS VOID SO NO MOCK POSSIBLE
 
     }

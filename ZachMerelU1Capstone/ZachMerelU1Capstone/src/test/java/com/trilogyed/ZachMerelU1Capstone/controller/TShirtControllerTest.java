@@ -2,10 +2,8 @@ package com.trilogyed.ZachMerelU1Capstone.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.trilogyed.ZachMerelU1Capstone.dao.ConsoleDao;
-import com.trilogyed.ZachMerelU1Capstone.dao.TShirtDao;
-import com.trilogyed.ZachMerelU1Capstone.model.Console;
 import com.trilogyed.ZachMerelU1Capstone.model.TShirt;
+import com.trilogyed.ZachMerelU1Capstone.service.InvoiceServiceLayer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +33,7 @@ public class TShirtControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TShirtDao tShirtDao;
+    private InvoiceServiceLayer invoiceServiceLayer;
 
     // ObjectMapper used to convert Java objects to JSON and vice versa
     private ObjectMapper mapper = new ObjectMapper();
@@ -63,15 +61,15 @@ public class TShirtControllerTest {
         TShirt createMockTShirtObject = new TShirt("Large", "Black", "men's black tshirt", BigDecimal.valueOf(8.99), 25);
 
         //GET ALL MOCK
-        when(tShirtDao.getAllTShirts()).thenReturn(tShirtList);
+        when(invoiceServiceLayer.getAllTShirts()).thenReturn(tShirtList);
         //GET TSHIRT BY ID MOCK
-        when(tShirtDao.getTShirt(1)).thenReturn(tShirtList.get(0));
+        when(invoiceServiceLayer.getTShirt(1)).thenReturn(tShirtList.get(0));
         //CREATE TSHIRT MOCK
-        when(tShirtDao.addTShirt(createMockTShirtObject)).thenReturn(tShirtList.get(0));
+        when(invoiceServiceLayer.addTShirt(createMockTShirtObject)).thenReturn(tShirtList.get(0));
         //GET TSHIRT BY SIZE MOCK
-        when(tShirtDao.getAllTShirtsBySize("Large")).thenReturn(tShirtSizeList);
+        when(invoiceServiceLayer.getAllTShirtsBySize("Large")).thenReturn(tShirtSizeList);
         //GET TSHIRT BY COLOR MOCK
-        when(tShirtDao.getAllTShirtsByColor("Black")).thenReturn(tShirtColorList);
+        when(invoiceServiceLayer.getAllTShirtsByColor("Black")).thenReturn(tShirtColorList);
         //UPDATE CONSOLE RETURNS VOID SO NO MOCK POSSIBLE
 
     }
