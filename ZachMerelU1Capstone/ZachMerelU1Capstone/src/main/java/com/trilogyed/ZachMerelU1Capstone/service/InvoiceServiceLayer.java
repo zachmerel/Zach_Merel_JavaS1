@@ -1,5 +1,6 @@
 package com.trilogyed.ZachMerelU1Capstone.service;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.trilogyed.ZachMerelU1Capstone.dao.*;
 import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
 import com.trilogyed.ZachMerelU1Capstone.exception.OrderTooManyException;
@@ -111,36 +112,43 @@ public class InvoiceServiceLayer {
 
     //UPDATES THE QUANTITY OF ITEM(4)
     public int updateInventoryQuantity(int quantityToPurchase, int product_id, String product_type) {
-        if (product_type.equalsIgnoreCase("Game")) {
-            int gameItemQuantity = gameDao.getGame(product_id).getQuantity();
-            int updatedGameItemQuantity = gameItemQuantity - quantityToPurchase;
-            if (updatedGameItemQuantity >= 0) {
-                gameDao.getGame(product_id).setQuantity(updatedGameItemQuantity);
-                return gameDao.getGame(product_id).getQuantity();
-            } else {
-                throw new OrderTooManyException();
+        try {
+            if (product_type.equalsIgnoreCase("Game")) {
+                int gameItemQuantity = gameDao.getGame(product_id).getQuantity();
+                int updatedGameItemQuantity = gameItemQuantity - quantityToPurchase;
+                if (updatedGameItemQuantity >= 0) {
+                    gameDao.getGame(product_id).setQuantity(updatedGameItemQuantity);
+                    return gameDao.getGame(product_id).getQuantity();
+//                } else {
+//                    throw new OrderTooManyException();
+                }
+            } else if (product_type.equalsIgnoreCase("Console")) {
+                int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
+                int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
+                if (updatedConsoleItemQuantity >= 0) {
+                    consoleDao.getConsole(product_id).setQuantity(updatedConsoleItemQuantity);
+                    return consoleDao.getConsole(product_id).getQuantity();
+//                } else {
+//                    throw new OrderTooManyException();
+                }
+            } else if (product_type.equalsIgnoreCase("TShirt")) {
+                int tShirtItemQuantity = consoleDao.getConsole(product_id).getQuantity();
+                int updatedTShirtItemQuantity = tShirtItemQuantity - quantityToPurchase;
+                if (updatedTShirtItemQuantity >= 0) {
+                    tShirtDao.getTShirt(product_id).setQuantity(updatedTShirtItemQuantity);
+                    return tShirtDao.getTShirt(product_id).getQuantity();
+//                } else {
+//                    throw new OrderTooManyException();
+                }
             }
-        } else if (product_type.equalsIgnoreCase("Console")) {
-            int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
-            int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
-            if (updatedConsoleItemQuantity >= 0) {
-                consoleDao.getConsole(product_id).setQuantity(updatedConsoleItemQuantity);
-                return consoleDao.getConsole(product_id).getQuantity();
-            } else {
-                throw new OrderTooManyException();
-            }
-        } else if (product_type.equalsIgnoreCase("TShirt")) {
-            int tShirtItemQuantity = consoleDao.getConsole(product_id).getQuantity();
-            int updatedTShirtItemQuantity = tShirtItemQuantity - quantityToPurchase;
-            if (updatedTShirtItemQuantity >= 0) {
-                tShirtDao.getTShirt(product_id).setQuantity(updatedTShirtItemQuantity);
-                return tShirtDao.getTShirt(product_id).getQuantity();
-            } else {
-                throw new OrderTooManyException();
-            }
-        } else {
-            return 1;
+        } catch (OrderTooManyException otme){
+            System.out.println( "Message: " + otme.getMessage());
         }
+
+//        else {
+            //SHOULD NEVER HIT THIS LINE
+            return 1;
+//        }
     }
 
 
@@ -166,19 +174,21 @@ public class InvoiceServiceLayer {
             }
 
         }
-
+        //SHOULD NEVER REACH THIS LINE
         return false;
     }
 
 
     //            //CHECK FOR VALID STATE CODE(7)
-    public boolean checkForStateCode(String state) throws InvalidStateException {
-        if (taxesDao.getTaxRate(state).getState().length() > 1) {
-            return true;
-        } else {
-            throw new InvalidStateException();
+    public boolean checkForStateCode(String state) {
+        try {
+            if (taxesDao.getTaxRate(state).getState().length() > 1) {
+                return true;
+            }
+        } catch (InvalidStateException ise) {
+            System.out.println("message: " + ise.getMessage());
         }
-
+        return false;
     }
 
     //SAVES INVOCIE TO DATABASE

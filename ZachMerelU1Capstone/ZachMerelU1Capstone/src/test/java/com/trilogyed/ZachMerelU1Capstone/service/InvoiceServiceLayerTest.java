@@ -156,14 +156,20 @@ public class InvoiceServiceLayerTest {
     private void setUpTShirtDaoMock() {
         tShirtDao = mock(TShirtDao.class);
         TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 5);
+        TShirt tShirtForThrowingException = new TShirt(2, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 1);
         when(tShirtDao.getTShirt(1)).thenReturn(tShirtForInvoiceViewModel);
+        when(tShirtDao.getTShirt(2))
+                .thenThrow(new OrderTooManyException("Error occurred"));
 
     }
 
     private void setUpConsoleDaoMock() {
         consoleDao = mock(ConsoleDao.class);
         Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 5);
+        Console consoleForThrowingException = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 1);
         when(consoleDao.getConsole(1)).thenReturn(consoleForInvoiceViewModel);
+        when(consoleDao.getConsole(2))
+                .thenThrow(new OrderTooManyException("Error occurred"));
     }
 
     private void setUpTaxesDaoMock() {
@@ -254,7 +260,6 @@ public class InvoiceServiceLayerTest {
         //assert
         assertEquals(invoiceViewModelIGot, consoleInvoiceViewModelExpected);
     }
-
 
     @Test
     public void shouldCalculateSalesTaxGivenStateAndTotalCost() {
@@ -353,7 +358,6 @@ public class InvoiceServiceLayerTest {
         assertEquals(processingFeeIExpect, processingFeeIGot);
     }
 
-
     @Test
     public void shouldCalculateProcessingFeeGivenItemTypeAndItemQuantityForOverTenTShirts() {
         //arrange
@@ -373,8 +377,7 @@ public class InvoiceServiceLayerTest {
     @Test
     public void shouldUpdateItemInventoryQuantityForGame() {
         //arrange
-        int numberOfItemsInStock = 5;
-        int numberOfItemsInOrder = 3;
+
 
         int numberOfItemsIExpectToBeInStock = 2;
 
@@ -383,6 +386,23 @@ public class InvoiceServiceLayerTest {
 
         //assert
         assertEquals(numberOfItemsIExpectToBeInStock, numberOfItemsIGotBackFromItemQuantity);
+    }
+
+    @Test
+    public void shouldThrowOrderTooManyError_WhenGameOrderQuantityExceedsGameInventoryForGame(){
+        int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(100, 2, "Game");
+
+    }
+
+    @Test
+    public void shouldThrowOrderTooManyError_WhenGameOrderQuantityExceedsGameInventoryForConsole(){
+        int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(100, 2, "Console");
+
+    }
+
+    @Test
+    public void shouldThrowOrderTooManyError_WhenGameOrderQuantityExceedsGameInventoryForTShirt(){
+        int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(100, 2, "TShirt");
     }
 
     @Test
@@ -511,34 +531,17 @@ public class InvoiceServiceLayerTest {
         assertEquals(whatIExpect, stateCodeIsValid);
     }
 
-    @Test(expected = InvalidStateException.class)
+    @Test
     public void shouldCheckToEnsureThatStateCodeIsNotValid() {
-        //arrange
-//        boolean whatIExpect = false;
-
-        //act
-//        boolean stateCodeIsValid = invoiceServiceLayer.checkForStateCode("AA");
-        invoiceServiceLayer.checkForStateCode("AA");
-
-        //assert
-//        assertEquals(whatIExpect, stateCodeIsValid);
-    }
-//
-//    @Test
-//    public void shouldGive406Status_whenOrderQuantityExceedsOrderInventory() throws Exception {
-//        // arrange
-//
-//    }
-
-    @Test(expected = OrderTooManyException.class)
-    public void shouldEnsureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHandNotTrue_thenExpectToThrowOrderToManyException() {
         //arrange
         boolean whatIExpect = false;
 
         //act
-        boolean itemOrderCountGreaterThanInventory= invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(7, "Game", 2);
+        boolean stateCodeIsValid = invoiceServiceLayer.checkForStateCode("AA");
 
-        assertEquals(whatIExpect, itemOrderCountGreaterThanInventory);
+
+        //assert
+        assertEquals(whatIExpect, stateCodeIsValid);
     }
 
     @Test
