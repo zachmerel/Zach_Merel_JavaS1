@@ -1,6 +1,7 @@
 package com.trilogyed.ZachMerelU1Capstone.model;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -8,9 +9,9 @@ import java.util.Objects;
 public class Console {
 
     private int console_id;
-    @NotNull(message = "please enter model")
+    @NotEmpty(message = "please enter model")
     private String model;
-    @NotNull(message = "please enter manufacturer")
+    @NotEmpty(message = "You MUST supply a manufacturer for console.")
     private String manufacturer;
     private String memory_amount;
     private String processor;

@@ -3,19 +3,16 @@ package com.trilogyed.ZachMerelU1Capstone.service;
 
 import com.trilogyed.ZachMerelU1Capstone.dao.*;
 import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
-import com.trilogyed.ZachMerelU1Capstone.exception.OrderToManyException;
+import com.trilogyed.ZachMerelU1Capstone.exception.OrderTooManyException;
 import com.trilogyed.ZachMerelU1Capstone.model.*;
 import com.trilogyed.ZachMerelU1Capstone.viewmodel.InvoiceViewModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -48,36 +45,101 @@ public class InvoiceServiceLayerTest {
 
     public void setUpInvoiceDao() {
         invoiceDao = mock(InvoiceDao.class);
-        Invoice invoiceIexpect = new Invoice();
-        invoiceIexpect.setId(1);
-        invoiceIexpect.setName("Zach Merel");
-        invoiceIexpect.setStreet("Addison Ave");
-        invoiceIexpect.setCity("Chicago");
-        invoiceIexpect.setZipcode("60613");
-        invoiceIexpect.setItem_type("Game");
-        invoiceIexpect.setItem_id(1);
-        invoiceIexpect.setQuantity(1);
-        invoiceIexpect.setUnit_price(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setSubtotal(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setTax(BigDecimal.valueOf(1.00));
-        invoiceIexpect.setProcessing_fee(BigDecimal.valueOf(1.49));
-        invoiceIexpect.setTotal(BigDecimal.valueOf(22.49));
+        Invoice invoiceToAddWithTypeGame = new Invoice();
+        invoiceToAddWithTypeGame.setName("Zach Merel");
+        invoiceToAddWithTypeGame.setStreet("Addison Ave");
+        invoiceToAddWithTypeGame.setCity("Chicago");
+        invoiceToAddWithTypeGame.setState("IL");
+        invoiceToAddWithTypeGame.setZipcode("60056");
+        invoiceToAddWithTypeGame.setItem_type("Game");
+        invoiceToAddWithTypeGame.setItem_id(1);
+        invoiceToAddWithTypeGame.setQuantity(1);
+        invoiceToAddWithTypeGame.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeGame.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeGame.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceToAddWithTypeGame.setProcessing_fee(BigDecimal.valueOf(1.49));
+        invoiceToAddWithTypeGame.setTotal(BigDecimal.valueOf(22.49));
 
-        Invoice invoiceToAdd = new Invoice();
-        invoiceIexpect.setName("Zach Merel");
-        invoiceIexpect.setStreet("Addison Ave");
-        invoiceIexpect.setCity("Chicago");
-        invoiceIexpect.setZipcode("60613");
-        invoiceIexpect.setItem_type("Game");
-        invoiceIexpect.setItem_id(1);
-        invoiceIexpect.setQuantity(1);
-        invoiceIexpect.setUnit_price(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setSubtotal(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setTax(BigDecimal.valueOf(1.00));
-        invoiceIexpect.setProcessing_fee(BigDecimal.valueOf(1.49));
-        invoiceIexpect.setTotal(BigDecimal.valueOf(22.49));
+        Invoice invoiceToAddWithTypeConsole = new Invoice();
+        invoiceToAddWithTypeConsole.setName("Zach Merel");
+        invoiceToAddWithTypeConsole.setStreet("Addison Ave");
+        invoiceToAddWithTypeConsole.setCity("Chicago");
+        invoiceToAddWithTypeConsole.setState("IL");
+        invoiceToAddWithTypeConsole.setZipcode("60056");
+        invoiceToAddWithTypeConsole.setItem_type("Console");
+        invoiceToAddWithTypeConsole.setItem_id(1);
+        invoiceToAddWithTypeConsole.setQuantity(1);
+        invoiceToAddWithTypeConsole.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeConsole.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeConsole.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceToAddWithTypeConsole.setProcessing_fee(BigDecimal.valueOf(14.99));
+        invoiceToAddWithTypeConsole.setTotal(BigDecimal.valueOf(35.99));
 
-        when(invoiceDao.addInvoice(invoiceToAdd)).thenReturn(invoiceIexpect);
+        Invoice invoiceToAddWithTypeTshirt = new Invoice();
+        invoiceToAddWithTypeTshirt.setName("Zach Merel");
+        invoiceToAddWithTypeTshirt.setStreet("Addison Ave");
+        invoiceToAddWithTypeTshirt.setCity("Chicago");
+        invoiceToAddWithTypeTshirt.setState("IL");
+        invoiceToAddWithTypeTshirt.setZipcode("60056");
+        invoiceToAddWithTypeTshirt.setItem_type("Console");
+        invoiceToAddWithTypeTshirt.setItem_id(1);
+        invoiceToAddWithTypeTshirt.setQuantity(1);
+        invoiceToAddWithTypeTshirt.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeTshirt.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceToAddWithTypeTshirt.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceToAddWithTypeTshirt.setProcessing_fee(BigDecimal.valueOf(1.98));
+        invoiceToAddWithTypeTshirt.setTotal(BigDecimal.valueOf(22.98));
+
+        Invoice invoiceIExpectWithTypeGame = new Invoice();
+        invoiceIExpectWithTypeGame.setId(1);
+        invoiceIExpectWithTypeGame.setName("Zach Merel");
+        invoiceIExpectWithTypeGame.setStreet("Addison Ave");
+        invoiceIExpectWithTypeGame.setState("IL");
+        invoiceIExpectWithTypeGame.setCity("Chicago");
+        invoiceIExpectWithTypeGame.setZipcode("60056");
+        invoiceIExpectWithTypeGame.setItem_type("Game");
+        invoiceIExpectWithTypeGame.setItem_id(1);
+        invoiceIExpectWithTypeGame.setQuantity(1);
+        invoiceIExpectWithTypeGame.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeGame.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeGame.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpectWithTypeGame.setProcessing_fee(BigDecimal.valueOf(1.49));
+        invoiceIExpectWithTypeGame.setTotal(BigDecimal.valueOf(22.49));
+
+        Invoice invoiceIExpectWithTypeConsole = new Invoice();
+        invoiceIExpectWithTypeConsole.setId(1);
+        invoiceIExpectWithTypeConsole.setName("Zach Merel");
+        invoiceIExpectWithTypeConsole.setStreet("Addison Ave");
+        invoiceIExpectWithTypeConsole.setState("IL");
+        invoiceIExpectWithTypeConsole.setCity("Chicago");
+        invoiceIExpectWithTypeConsole.setZipcode("60056");
+        invoiceIExpectWithTypeConsole.setItem_type("Game");
+        invoiceIExpectWithTypeConsole.setItem_id(1);
+        invoiceIExpectWithTypeConsole.setQuantity(1);
+        invoiceIExpectWithTypeConsole.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeConsole.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeConsole.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpectWithTypeConsole.setProcessing_fee(BigDecimal.valueOf(14.99));
+        invoiceIExpectWithTypeConsole.setTotal(BigDecimal.valueOf(35.99));
+
+        Invoice invoiceIExpectWithTypeTShirt = new Invoice();
+        invoiceIExpectWithTypeTShirt.setId(1);
+        invoiceIExpectWithTypeTShirt.setName("Zach Merel");
+        invoiceIExpectWithTypeTShirt.setStreet("Addison Ave");
+        invoiceIExpectWithTypeTShirt.setState("IL");
+        invoiceIExpectWithTypeTShirt.setCity("Chicago");
+        invoiceIExpectWithTypeTShirt.setZipcode("60056");
+        invoiceIExpectWithTypeTShirt.setItem_type("Game");
+        invoiceIExpectWithTypeTShirt.setItem_id(1);
+        invoiceIExpectWithTypeTShirt.setQuantity(1);
+        invoiceIExpectWithTypeTShirt.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeTShirt.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpectWithTypeTShirt.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpectWithTypeTShirt.setProcessing_fee(BigDecimal.valueOf(1.98));
+        invoiceIExpectWithTypeTShirt.setTotal(BigDecimal.valueOf(22.98));
+
+        when(invoiceDao.addInvoice(invoiceToAddWithTypeGame)).thenReturn(invoiceIExpectWithTypeGame);
+
     }
 
     private void setUpGameDaoMock() {
@@ -88,7 +150,7 @@ public class InvoiceServiceLayerTest {
 
         when(gameDao.getGame(1)).thenReturn(gameForInvoiceViewModel);
         when(gameDao.getGame(2))
-                .thenThrow(new OrderToManyException("Error occurred"));
+                .thenThrow(new OrderTooManyException("Error occurred"));
     }
 
     private void setUpTShirtDaoMock() {
@@ -426,46 +488,117 @@ public class InvoiceServiceLayerTest {
 //
 //    }
 
-    @Test(expected = OrderToManyException.class)
+    @Test(expected = OrderTooManyException.class)
     public void whenEnsureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHandNotTrue_thenExpectToThrowOrderToManyException() {
+//arrange
+        boolean whatIExpect = false;
 
         //act
         invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(7, "Game", 2);
+
 
 
     }
 
     @Test
     public void shouldAddInvoiceWithObjectGameToDataBase() {
-//        Game gameForInvoice = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 5);
         //arrange
-        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 5);
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 1);
 
         InvoiceViewModel invoiceViewModelToInsert = new InvoiceViewModel(1, "Zach Merel", "Addison Ave",
                 "Chicago", "IL", "60056", "Game", null,
                 null, gameForInvoiceViewModel, BigDecimal.valueOf(20.00), BigDecimal.valueOf(20.00),
                 BigDecimal.valueOf(1.00).setScale(2), BigDecimal.valueOf(1.49), BigDecimal.valueOf(22.49));
 
-        Invoice invoiceIexpect = new Invoice();
-        invoiceIexpect.setId(1);
-        invoiceIexpect.setName("Zach Merel");
-        invoiceIexpect.setStreet("Addison Ave");
-        invoiceIexpect.setCity("Chicago");
-        invoiceIexpect.setZipcode("60613");
-        invoiceIexpect.setItem_type("Game");
-        invoiceIexpect.setItem_id(1);
-        invoiceIexpect.setQuantity(1);
-        invoiceIexpect.setUnit_price(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setSubtotal(BigDecimal.valueOf(20.00));
-        invoiceIexpect.setTax(BigDecimal.valueOf(1.00));
-        invoiceIexpect.setProcessing_fee(BigDecimal.valueOf(1.49));
-        invoiceIexpect.setTotal(BigDecimal.valueOf(22.49));
+        Invoice invoiceIExpect = new Invoice();
+        invoiceIExpect.setId(1);
+        invoiceIExpect.setName("Zach Merel");
+        invoiceIExpect.setStreet("Addison Ave");
+        invoiceIExpect.setCity("Chicago");
+        invoiceIExpect.setState("IL");
+        invoiceIExpect.setZipcode("60056");
+        invoiceIExpect.setItem_type("Game");
+        invoiceIExpect.setItem_id(1);
+        invoiceIExpect.setQuantity(1);
+        invoiceIExpect.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpect.setProcessing_fee(BigDecimal.valueOf(1.49));
+        invoiceIExpect.setTotal(BigDecimal.valueOf(22.49));
 
         //act
         Invoice invoiceToSave = invoiceServiceLayer.saveInvoice(invoiceViewModelToInsert);
 
         //assert
-        assertEquals(invoiceIexpect, invoiceToSave);
+        assertEquals(invoiceIExpect, invoiceToSave);
     }
+
+    @Test
+    public void shouldAddInvoiceWithObjectConsoleToDataBase() {
+        //arrange
+        Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 1);
+
+        InvoiceViewModel invoiceViewModelToInsert = new InvoiceViewModel(1, "Zach Merel", "Addison Ave",
+                "Chicago", "IL", "60056", "Console", consoleForInvoiceViewModel,
+                null, null, BigDecimal.valueOf(20.00), BigDecimal.valueOf(20.00),
+                BigDecimal.valueOf(1.00).setScale(2), BigDecimal.valueOf(14.99), BigDecimal.valueOf(35.99));
+
+        Invoice invoiceIExpect = new Invoice();
+        invoiceIExpect.setId(1);
+        invoiceIExpect.setName("Zach Merel");
+        invoiceIExpect.setStreet("Addison Ave");
+        invoiceIExpect.setCity("Chicago");
+        invoiceIExpect.setState("IL");
+        invoiceIExpect.setZipcode("60056");
+        invoiceIExpect.setItem_type("Console");
+        invoiceIExpect.setItem_id(1);
+        invoiceIExpect.setQuantity(1);
+        invoiceIExpect.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpect.setProcessing_fee(BigDecimal.valueOf(14.99));
+        invoiceIExpect.setTotal(BigDecimal.valueOf(35.99));
+
+        //act
+        Invoice invoiceToSave = invoiceServiceLayer.saveInvoice(invoiceViewModelToInsert);
+
+        //assert
+        assertEquals(invoiceIExpect, invoiceToSave);
+    }
+
+    @Test
+    public void shouldAddInvoiceWithObjectTShirtToDataBase() {
+        //arrange
+        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 1);
+
+        InvoiceViewModel invoiceViewModelToInsert = new InvoiceViewModel(1, "Zach Merel", "Addison Ave",
+                "Chicago", "IL", "60056", "TShirt", null,
+                tShirtForInvoiceViewModel, null, BigDecimal.valueOf(20.00), BigDecimal.valueOf(20.00),
+                BigDecimal.valueOf(1.00).setScale(2), BigDecimal.valueOf(1.98), BigDecimal.valueOf(22.98));
+
+        Invoice invoiceIExpect = new Invoice();
+        invoiceIExpect.setId(1);
+        invoiceIExpect.setName("Zach Merel");
+        invoiceIExpect.setStreet("Addison Ave");
+        invoiceIExpect.setCity("Chicago");
+        invoiceIExpect.setState("IL");
+        invoiceIExpect.setZipcode("60056");
+        invoiceIExpect.setItem_type("TShirt");
+        invoiceIExpect.setItem_id(1);
+        invoiceIExpect.setQuantity(1);
+        invoiceIExpect.setUnit_price(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setSubtotal(BigDecimal.valueOf(20.00));
+        invoiceIExpect.setTax(BigDecimal.valueOf(1.00).setScale(2));
+        invoiceIExpect.setProcessing_fee(BigDecimal.valueOf(1.98));
+        invoiceIExpect.setTotal(BigDecimal.valueOf(22.98));
+
+        //act
+        Invoice invoiceToSave = invoiceServiceLayer.saveInvoice(invoiceViewModelToInsert);
+
+        //assert
+        assertEquals(invoiceIExpect, invoiceToSave);
+    }
+
+
 }
 

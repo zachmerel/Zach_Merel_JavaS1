@@ -3,7 +3,7 @@ package com.trilogyed.ZachMerelU1Capstone.controller;
 
 import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
 import com.trilogyed.ZachMerelU1Capstone.exception.NotFoundException;
-import com.trilogyed.ZachMerelU1Capstone.exception.OrderToManyException;
+import com.trilogyed.ZachMerelU1Capstone.exception.OrderTooManyException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.mediatype.vnderrors.VndErrors;
 import org.springframework.http.HttpStatus;
@@ -80,9 +80,9 @@ public class ControllerExceptionHandler {
         return responseEntity;
     }
 
-    @ExceptionHandler(value = {OrderToManyException.class})
+    @ExceptionHandler(value = {OrderTooManyException.class})
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    public ResponseEntity<VndErrors> OrderToManyException(OrderToManyException e, WebRequest request) {
+    public ResponseEntity<VndErrors> OrderToManyException(OrderTooManyException e, WebRequest request) {
         VndErrors error = new VndErrors(request.toString(), "Not found : " + e.getMessage());
         ResponseEntity<VndErrors> responseEntity = new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
         return responseEntity;

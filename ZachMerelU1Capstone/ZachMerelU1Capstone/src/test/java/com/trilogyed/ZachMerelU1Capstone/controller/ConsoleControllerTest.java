@@ -186,7 +186,7 @@ public class ConsoleControllerTest {
     @Test
     public void shouldGive422Status_whenIdInPathDoesNotMatchIdInRequestBody() throws Exception {
         // arrange
-        Console inputAndOutputConsoleForPut = new Console(1, "", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
+        Console inputAndOutputConsoleForPut = new Console(1, "Playstation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(199.99), 25);
         String inputJson = mapper.writeValueAsString(inputAndOutputConsoleForPut);
         String expectedMessage = "The id in the path does not equal the id in the request body";
 

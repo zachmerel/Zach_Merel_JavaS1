@@ -2,7 +2,7 @@ package com.trilogyed.ZachMerelU1Capstone.service;
 
 import com.trilogyed.ZachMerelU1Capstone.dao.*;
 import com.trilogyed.ZachMerelU1Capstone.exception.InvalidStateException;
-import com.trilogyed.ZachMerelU1Capstone.exception.OrderToManyException;
+import com.trilogyed.ZachMerelU1Capstone.exception.OrderTooManyException;
 import com.trilogyed.ZachMerelU1Capstone.model.*;
 import com.trilogyed.ZachMerelU1Capstone.viewmodel.InvoiceViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +118,7 @@ public class InvoiceServiceLayer {
                 gameDao.getGame(product_id).setQuantity(updatedGameItemQuantity);
                 return gameDao.getGame(product_id).getQuantity();
             } else {
-                throw new OrderToManyException();
+                throw new OrderTooManyException();
             }
         } else if (product_type.equalsIgnoreCase("Console")) {
             int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
@@ -127,16 +127,16 @@ public class InvoiceServiceLayer {
                 consoleDao.getConsole(product_id).setQuantity(updatedConsoleItemQuantity);
                 return consoleDao.getConsole(product_id).getQuantity();
             } else {
-                throw new OrderToManyException();
+                throw new OrderTooManyException();
             }
         } else if (product_type.equalsIgnoreCase("TShirt")) {
-            int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
-            int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
-            if (updatedConsoleItemQuantity >= 0) {
-                tShirtDao.getTShirt(product_id).setQuantity(updatedConsoleItemQuantity);
+            int tShirtItemQuantity = consoleDao.getConsole(product_id).getQuantity();
+            int updatedTShirtItemQuantity = tShirtItemQuantity - quantityToPurchase;
+            if (updatedTShirtItemQuantity >= 0) {
+                tShirtDao.getTShirt(product_id).setQuantity(updatedTShirtItemQuantity);
                 return tShirtDao.getTShirt(product_id).getQuantity();
             } else {
-                throw new OrderToManyException();
+                throw new OrderTooManyException();
             }
         } else {
             return 1;
@@ -185,9 +185,11 @@ public class InvoiceServiceLayer {
     @Transactional
     public Invoice saveInvoice(InvoiceViewModel invoiceViewModel) {
         Invoice invoice = new Invoice();
+        invoice.setId(invoiceViewModel.getInvoice_id());
         invoice.setName(invoiceViewModel.getName());
         invoice.setStreet(invoiceViewModel.getStreet());
         invoice.setCity(invoiceViewModel.getCity());
+        invoice.setState(invoiceViewModel.getState());
         invoice.setZipcode(invoiceViewModel.getZipcode());
         invoice.setItem_type(invoiceViewModel.getItem_type());
         if (invoice.getItem_type().equalsIgnoreCase("Game")) {
@@ -208,11 +210,10 @@ public class InvoiceServiceLayer {
         invoice.setProcessing_fee(invoiceViewModel.getProcessing_fee());
         invoice.setTotal(invoiceViewModel.getTotal());
 
-       invoice = invoiceDao.addInvoice(invoice);
-//       invoice.setId(invoice.getId());
-       return invoice;
+        invoiceDao.addInvoice(invoice);
+        invoice.setId(invoice.getId());
+        return invoice;
     }
-
 
 //            Console API
 

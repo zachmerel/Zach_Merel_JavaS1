@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Invoice {
 
-    private int id;
+    private int invoice_id;
     private String name;
     private String street;
     private String city;
@@ -22,11 +22,11 @@ public class Invoice {
     private BigDecimal total;
 
     public int getId() {
-        return id;
+        return invoice_id;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.invoice_id = id;
     }
 
     public String getName() {
@@ -138,7 +138,7 @@ public class Invoice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return id == invoice.id &&
+        return invoice_id == invoice.invoice_id &&
                 item_id == invoice.item_id &&
                 quantity == invoice.quantity &&
                 name.equals(invoice.name) &&
@@ -156,6 +156,26 @@ public class Invoice {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, street, city, state, zipcode, item_type,item_id, quantity, unit_price, subtotal, tax, processing_fee, total);
+        return Objects.hash(invoice_id, name, street, city, state, zipcode, item_type,item_id, quantity, unit_price, subtotal, tax, processing_fee, total);
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + invoice_id +
+                ", name='" + name + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", item_type='" + item_type + '\'' +
+                ", item_id=" + item_id +
+                ", quantity=" + quantity +
+                ", unit_price=" + unit_price +
+                ", subtotal=" + subtotal +
+                ", tax=" + tax +
+                ", processing_fee=" + processing_fee +
+                ", total=" + total +
+                '}';
     }
 }
