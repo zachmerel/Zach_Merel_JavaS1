@@ -430,6 +430,48 @@ public class InvoiceServiceLayerTest {
     }
 
     @Test
+    public void shouldEnsureOrderQuantityGreaterNumberOfInventoryOnHandForGame() {
+        //arrange
+        boolean whatIExpect = false;
+
+        //act
+        boolean itemOrderCountGreaterThanInventory = invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(10, "Game", 1);
+
+        //assert
+        //SAME THING
+        assertEquals(whatIExpect, itemOrderCountGreaterThanInventory);
+//        assertTrue(itemOrderCountLessInventory);
+    }
+
+    @Test
+    public void shouldEnsureOrderQuantityGreaterNumberOfInventoryOnHandForConsole() {
+        //arrange
+        boolean whatIExpect = false;
+
+        //act
+        boolean itemOrderCountGreaterThanInventory = invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(10, "Console", 1);
+
+        //assert
+        //SAME THING
+        assertEquals(whatIExpect, itemOrderCountGreaterThanInventory);
+//        assertTrue(itemOrderCountLessInventory);
+    }
+
+    @Test
+    public void shouldEnsureOrderQuantityGreaterNumberOfInventoryOnHandForTShirt() {
+        //arrange
+        boolean whatIExpect = false;
+
+        //act
+        boolean itemOrderCountGreaterThanInventory = invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(10, "TShirt", 1);
+
+        //assert
+        //SAME THING
+        assertEquals(whatIExpect, itemOrderCountGreaterThanInventory);
+//        assertTrue(itemOrderCountLessInventory);
+    }
+
+    @Test
     public void shouldEnsureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHandForConsole() {
         //arrange
         boolean whatIExpect = true;
@@ -489,15 +531,14 @@ public class InvoiceServiceLayerTest {
 //    }
 
     @Test(expected = OrderTooManyException.class)
-    public void whenEnsureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHandNotTrue_thenExpectToThrowOrderToManyException() {
-//arrange
+    public void shouldEnsureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHandNotTrue_thenExpectToThrowOrderToManyException() {
+        //arrange
         boolean whatIExpect = false;
 
         //act
-        invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(7, "Game", 2);
+        boolean itemOrderCountGreaterThanInventory= invoiceServiceLayer.ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(7, "Game", 2);
 
-
-
+        assertEquals(whatIExpect, itemOrderCountGreaterThanInventory);
     }
 
     @Test
