@@ -37,6 +37,9 @@ public class InvoiceServiceLayer {
 
     public InvoiceViewModel makeAPurchase(InputObject inputObject) {
 
+        checkForStateCode(inputObject.getState());
+        ensureOrderQuantityLessThanOrEqualToNumberOfInventoryOnHand(inputObject.getQuantity(),inputObject.getItem_type(),inputObject.getItem_id());
+
         InvoiceViewModel returnVal = new InvoiceViewModel();
         //REMOVE THIS WHEN ADDING TO DATABASE INSTEAD OF USING MOCK
         returnVal.setInvoice_id(1);
@@ -83,6 +86,8 @@ public class InvoiceServiceLayer {
             returnVal.setProcessing_fee(calculateProcessingFee(inputObject.getItem_type(), inputObject.getQuantity()));
             returnVal.setTotal(returnVal.getTax().add((returnVal.getSubtotal().add(returnVal.getProcessing_fee()))));
         }
+        updateInventoryQuantity(inputObject.getQuantity(),inputObject.getItem_id(),inputObject.getItem_type());
+        saveInvoice(returnVal);
 
         return returnVal;
     }
@@ -119,31 +124,26 @@ public class InvoiceServiceLayer {
                 if (updatedGameItemQuantity >= 0) {
                     gameDao.getGame(product_id).setQuantity(updatedGameItemQuantity);
                     return gameDao.getGame(product_id).getQuantity();
-//                } else {
-//                    throw new OrderTooManyException();
                 }
-            } else if (product_type.equalsIgnoreCase("Console")) {
+            }
+            else if (product_type.equalsIgnoreCase("Console")) {
                 int consoleItemQuantity = consoleDao.getConsole(product_id).getQuantity();
                 int updatedConsoleItemQuantity = consoleItemQuantity - quantityToPurchase;
                 if (updatedConsoleItemQuantity >= 0) {
                     consoleDao.getConsole(product_id).setQuantity(updatedConsoleItemQuantity);
                     return consoleDao.getConsole(product_id).getQuantity();
-//                } else {
-//                    throw new OrderTooManyException();
                 }
-            } else if (product_type.equalsIgnoreCase("TShirt")) {
+            }
+            else if (product_type.equalsIgnoreCase("TShirt")) {
                 int tShirtItemQuantity = consoleDao.getConsole(product_id).getQuantity();
                 int updatedTShirtItemQuantity = tShirtItemQuantity - quantityToPurchase;
                 if (updatedTShirtItemQuantity >= 0) {
                     tShirtDao.getTShirt(product_id).setQuantity(updatedTShirtItemQuantity);
                     return tShirtDao.getTShirt(product_id).getQuantity();
-//                } else {
-//                    throw new OrderTooManyException();
                 }
             }
         } catch (OrderTooManyException otme){
-            System.out.println( "Message: " + otme.getMessage());
-        }
+            System.out.println( "Message: " + otme.getMessage()); }
 
 //        else {
             //SHOULD NEVER HIT THIS LINE
@@ -186,8 +186,7 @@ public class InvoiceServiceLayer {
                 return true;
             }
         } catch (InvalidStateException ise) {
-            System.out.println("message: " + ise.getMessage());
-        }
+            System.out.println("message: " + ise.getMessage()); }
         return false;
     }
 
@@ -243,13 +242,9 @@ public class InvoiceServiceLayer {
         return consoleDao.getAllConsolesByManufacturer(manufacturer);
     }
 
-    public void updateConsole(Console console) {
-        consoleDao.updateConsole(console);
-    }
+    public void updateConsole(Console console) { consoleDao.updateConsole(console); }
 
-    public void deleteConsole(int id) {
-        consoleDao.deleteConsole(id);
-    }
+    public void deleteConsole(int id) { consoleDao.deleteConsole(id); }
     //
     // Game API
     //
@@ -278,13 +273,9 @@ public class InvoiceServiceLayer {
         return gameDao.getAllGamesByTitle(title);
     }
 
-    public void updateGame(Game game) {
-        gameDao.updateGame(game);
-    }
+    public void updateGame(Game game) { gameDao.updateGame(game); }
 
-    public void deleteGame(int id) {
-        gameDao.deleteGame(id);
-    }
+    public void deleteGame(int id) { gameDao.deleteGame(id); }
 
     //
     // TSHIRT API
@@ -310,13 +301,9 @@ public class InvoiceServiceLayer {
         return tShirtDao.getAllTShirtsBySize(size);
     }
 
-    public void updateTShirt(TShirt tShirt) {
-        tShirtDao.updateTShirt(tShirt);
-    }
+    public void updateTShirt(TShirt tShirt) { tShirtDao.updateTShirt(tShirt); }
 
-    public void deleteTShirt(int id) {
-        tShirtDao.deleteTShirt(id);
-    }
+    public void deleteTShirt(int id) { tShirtDao.deleteTShirt(id); }
     //
     // PROCESSING FEE API
     //

@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -144,32 +146,50 @@ public class InvoiceServiceLayerTest {
 
     private void setUpGameDaoMock() {
         gameDao = mock(GameDao.class);
-        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 5);
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
         Game gameForThrowingException = new Game(2, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 1);
-
+        List<Game> gameList = new ArrayList<>();
+        gameList.add(gameForInvoiceViewModel);
 
         when(gameDao.getGame(1)).thenReturn(gameForInvoiceViewModel);
         when(gameDao.getGame(2))
                 .thenThrow(new OrderTooManyException("Error occurred"));
+        when(gameDao.getAllGamesByStudio("Rockstar")).thenReturn(gameList);
+        when(gameDao.getAllGames()).thenReturn(gameList);
+        when(gameDao.getAllGamesByTitle("Grand Theft Auto: Vice City")).thenReturn(gameList);
+        when(gameDao.getAllGamesByEsrbRating("Mature")).thenReturn(gameList);
+        when(gameDao.addGame(gameForInvoiceViewModel)).thenReturn(gameForInvoiceViewModel);
     }
 
     private void setUpTShirtDaoMock() {
         tShirtDao = mock(TShirtDao.class);
-        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 5);
+        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
         TShirt tShirtForThrowingException = new TShirt(2, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 1);
+        List<TShirt> listOfTShirts = new ArrayList<>();
+        listOfTShirts.add(tShirtForInvoiceViewModel);
         when(tShirtDao.getTShirt(1)).thenReturn(tShirtForInvoiceViewModel);
         when(tShirtDao.getTShirt(2))
                 .thenThrow(new OrderTooManyException("Error occurred"));
-
+        when(tShirtDao.addTShirt(tShirtForInvoiceViewModel)).thenReturn(tShirtForInvoiceViewModel);
+        when(tShirtDao.getAllTShirts()).thenReturn(listOfTShirts);
+        when(tShirtDao.getAllTShirtsByColor("Black")).thenReturn(listOfTShirts);
+        when(tShirtDao.getAllTShirtsBySize("Large")).thenReturn(listOfTShirts);
     }
 
     private void setUpConsoleDaoMock() {
         consoleDao = mock(ConsoleDao.class);
-        Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 5);
+        Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 6);
         Console consoleForThrowingException = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 1);
+        List<Console> listOfConsoles = new ArrayList<>();
+        listOfConsoles.add(consoleForInvoiceViewModel);
         when(consoleDao.getConsole(1)).thenReturn(consoleForInvoiceViewModel);
         when(consoleDao.getConsole(2))
                 .thenThrow(new OrderTooManyException("Error occurred"));
+        when(consoleDao.getAllConsoles()).thenReturn(listOfConsoles);
+        when(consoleDao.getAllConsolesByManufacturer("Sony")).thenReturn(listOfConsoles);
+        when(consoleDao.addConsole(consoleForInvoiceViewModel)).thenReturn(consoleForInvoiceViewModel);
+
+
     }
 
     private void setUpTaxesDaoMock() {
@@ -232,11 +252,11 @@ public class InvoiceServiceLayerTest {
         //arrange
         Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 5);
         InputObject consoleInputObjectToInsert = new InputObject("Zach Merel", "Addison Ave",
-                "Chicago", "IL", "60056", "Console", 1, 5);
+                "Chicago", "IL", "60056", "Console", 1, 1);
         InvoiceViewModel consoleInvoiceViewModelExpected = new InvoiceViewModel(1, "Zach Merel", "Addison Ave",
                 "Chicago", "IL", "60056", "Console", consoleForInvoiceViewModel,
-                null, null, BigDecimal.valueOf(20.00), BigDecimal.valueOf(100.00),
-                BigDecimal.valueOf(5.00).setScale(2), BigDecimal.valueOf(14.99), BigDecimal.valueOf(119.99));
+                null, null, BigDecimal.valueOf(20.00), BigDecimal.valueOf(20.00),
+                BigDecimal.valueOf(1.00).setScale(2), BigDecimal.valueOf(14.99), BigDecimal.valueOf(35.99));
         //act
         InvoiceViewModel invoiceViewModelIGot = invoiceServiceLayer.makeAPurchase(consoleInputObjectToInsert);
 
@@ -379,7 +399,7 @@ public class InvoiceServiceLayerTest {
         //arrange
 
 
-        int numberOfItemsIExpectToBeInStock = 2;
+        int numberOfItemsIExpectToBeInStock = 3;
 
         //act
         int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(3, 1, "Game");
@@ -408,10 +428,9 @@ public class InvoiceServiceLayerTest {
     @Test
     public void shouldUpdateItemInventoryQuantityForConsole() {
         //arrange
-        int numberOfItemsInStock = 5;
-        int numberOfItemsInOrder = 3;
 
-        int numberOfItemsIExpectToBeInStock = 2;
+
+        int numberOfItemsIExpectToBeInStock = 3;
 
         //act
         int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(3, 1, "Console");
@@ -423,10 +442,8 @@ public class InvoiceServiceLayerTest {
     @Test
     public void shouldUpdateItemInventoryQuantityForTShirt() {
         //arrange
-        int numberOfItemsInStock = 5;
-        int numberOfItemsInOrder = 3;
 
-        int numberOfItemsIExpectToBeInStock = 2;
+        int numberOfItemsIExpectToBeInStock = 3;
 
         //act
         int numberOfItemsIGotBackFromItemQuantity = invoiceServiceLayer.updateInventoryQuantity(3, 1, "TShirt");
@@ -643,6 +660,207 @@ public class InvoiceServiceLayerTest {
         assertEquals(invoiceIExpect, invoiceToSave);
     }
 
+    @Test
+    public void shouldTestGameDaoToGetAllGameByStudio(){
+        //arrange
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+        List<Game> gameListByStudioIExpect = new ArrayList<>();
+        gameListByStudioIExpect.add(gameForInvoiceViewModel);
+        //act
+        List<Game> gameListByStudioIGot = invoiceServiceLayer.getAllGamesByStudio("Rockstar");
 
+        //assert
+        assertEquals(gameListByStudioIExpect, gameListByStudioIGot);
+    }
+
+    @Test
+    public void shouldTestGameDaoToGetAllGameByEsrbRating(){
+        //arrange
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+        List<Game> gameListByEsrbRatingIExpect = new ArrayList<>();
+        gameListByEsrbRatingIExpect.add(gameForInvoiceViewModel);
+        //act
+        List<Game> gameListByEsrbRatingIGot = invoiceServiceLayer.getAllGamesByEsrbRating("Mature");
+
+        //assert
+        assertEquals(gameListByEsrbRatingIExpect, gameListByEsrbRatingIGot);
+    }
+
+    @Test
+    public void shouldTestGameDaoToGetAllGameByTitle(){
+        //arrange
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+        List<Game> gameListByTitleIExpect = new ArrayList<>();
+        gameListByTitleIExpect.add(gameForInvoiceViewModel);
+        //act
+        List<Game> gameListByTitleIGot = invoiceServiceLayer.getAllGamesByTitle("Grand Theft Auto: Vice City");
+
+        //assert
+        assertEquals(gameListByTitleIExpect, gameListByTitleIGot);
+    }
+
+    @Test
+    public void shouldTestGameDaoToAddGame(){
+        //arrange
+        Game gameToInsert = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+        //act
+       Game gameAfterInsert = invoiceServiceLayer.addGame(gameToInsert);
+        //assert
+        assertEquals(gameToInsert, gameAfterInsert);
+    }
+
+    @Test
+    public void shouldTestGameDaoToGetAll(){
+        //arrange
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+        List<Game> gameListIExpect = new ArrayList<>();
+        gameListIExpect.add(gameForInvoiceViewModel);
+        //act
+        List<Game> gameListIGot = invoiceServiceLayer.getAllGames();
+
+        //assert
+        assertEquals(gameListIExpect, gameListIGot);
+    }
+
+    @Test
+    public void shouldTestGameDaoToGetGameById(){
+        //arrange
+        Game gameForInvoiceViewModel = new Game(1, "Grand Theft Auto: Vice City", "Mature", "Grand Theft Auto: Vice City is an action-adventure video game", BigDecimal.valueOf(20.00), "Rockstar North", 6);
+
+        //act
+        Game gameIGot = invoiceServiceLayer.getGame(1);
+
+        //assert
+        assertEquals(gameForInvoiceViewModel, gameIGot);
+    }
+
+    @Test
+    public void shouldTestConsoleDaoToAddConsole(){
+        //arrange
+        Console consoleToInsert = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 6);
+        //act
+        Console consoleAfterInsert = invoiceServiceLayer.addConsole(consoleToInsert);
+        //assert
+        assertEquals(consoleToInsert, consoleAfterInsert);
+    }
+
+    @Test
+    public void shouldTestConsoleDaoToGetConsoleById(){
+        //arrange
+        Console console = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 6);
+
+        //act
+        Console consoleIGot = invoiceServiceLayer.getConsole(1);
+
+        //assert
+        assertEquals(console, consoleIGot);
+    }
+
+    @Test
+    public void shouldTestConsoleDaoToGetAll(){
+        //arrange
+        Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 6);
+        List<Console> listOfConsoles = new ArrayList<>();
+        listOfConsoles.add(consoleForInvoiceViewModel);
+        //act
+        List<Console> consoleListIGot = invoiceServiceLayer.getAllConsoles();
+
+        //assert
+        assertEquals(listOfConsoles, consoleListIGot);
+    }
+
+    @Test
+    public void shouldTestConsoleDaoToGetAllByManufacturer(){
+        //arrange
+        Console consoleForInvoiceViewModel = new Console(1, "PlayStation 2", "Sony", "16mb", "Sony2001", BigDecimal.valueOf(20.00), 6);
+        List<Console> listOfConsoles = new ArrayList<>();
+        listOfConsoles.add(consoleForInvoiceViewModel);
+        //act
+        List<Console> consoleListIGot = invoiceServiceLayer.getAllConsolesByManufacturer("Sony");
+
+        //assert
+        assertEquals(listOfConsoles, consoleListIGot);
+    }
+
+    @Test
+    public void shouldTestTShirtDaoToAddTshirt(){
+        //arrange
+        TShirt tShirtToInsert = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
+        //act
+        TShirt tShirtAfterInsert = invoiceServiceLayer.addTShirt(tShirtToInsert);
+        //assert
+        assertEquals(tShirtToInsert, tShirtAfterInsert);
+    }
+
+    @Test
+    public void shouldTestTShirtDaoToGetTShirtById(){
+        //arrange
+        TShirt tShirtIExpect = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
+
+        //act
+        TShirt tShirtIGot = invoiceServiceLayer.getTShirt(1);
+
+        //assert
+        assertEquals(tShirtIExpect, tShirtIGot);
+    }
+
+    @Test
+    public void shouldTestTShirtDaoToGetAll(){
+        //arrange
+        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
+        List<TShirt> listOfTShirts = new ArrayList<>();
+        listOfTShirts.add(tShirtForInvoiceViewModel);
+        //act
+        List<TShirt> tShirtListIGot = invoiceServiceLayer.getAllTShirts();
+
+        //assert
+        assertEquals(listOfTShirts, tShirtListIGot);
+    }
+
+    @Test
+    public void shouldTestTShirtDaoToGetTShirtByColor(){
+        //arrange
+        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
+        List<TShirt> listOfTShirts = new ArrayList<>();
+        listOfTShirts.add(tShirtForInvoiceViewModel);
+        //act
+        List<TShirt> tShirtListIGot = invoiceServiceLayer.getAllTShirtsByColor("Black");
+
+        //assert
+        assertEquals(listOfTShirts, tShirtListIGot);
+    }
+
+    @Test
+    public void shouldTestTShirtDaoToGetTShirtBySize(){
+        //arrange
+        TShirt tShirtForInvoiceViewModel = new TShirt(1, "Large", "Black", "men's black tshirt", BigDecimal.valueOf(20.00), 6);
+        List<TShirt> listOfTShirts = new ArrayList<>();
+        listOfTShirts.add(tShirtForInvoiceViewModel);
+        //act
+        List<TShirt> tShirtListIGot = invoiceServiceLayer.getAllTShirtsBySize("Large");
+
+        //assert
+        assertEquals(listOfTShirts, tShirtListIGot);
+    }
+
+    @Test
+    public void shouldTestProcessingFeeDaoToGetProcessingFee(){
+        //arrange
+        ProcessingFee processingFeeIExpect = new ProcessingFee("Game", BigDecimal.valueOf(1.49));
+        //act
+        ProcessingFee processingFeeIGot = invoiceServiceLayer.getProcessingFee("Game");
+        //assert
+        assertEquals(processingFeeIExpect,processingFeeIGot);
+    }
+
+    @Test
+    public void shouldTestStateTaxRateDaoToGetTaxRate(){
+        //arrange
+        StateTaxRate stateTaxRateIExpect = new StateTaxRate("IL", BigDecimal.valueOf(0.05));
+        //act
+        StateTaxRate stateTaxRateIGot = invoiceServiceLayer.getTaxRate("IL");
+        //assert
+        assertEquals(stateTaxRateIExpect, stateTaxRateIExpect);
+    }
 }
 
