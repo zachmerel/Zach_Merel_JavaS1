@@ -5,9 +5,7 @@ package com.trilogyed.ZachMerelU1Capstone.exception;
  */
 public class OrderTooManyException extends RuntimeException{
 
-    public OrderTooManyException(){
 
-    }
 
     public OrderTooManyException(String message){super(message);}
 }
