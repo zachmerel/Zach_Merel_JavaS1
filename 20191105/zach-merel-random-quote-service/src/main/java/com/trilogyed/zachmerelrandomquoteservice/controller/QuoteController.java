@@ -1,16 +1,12 @@
 package com.trilogyed.zachmerelrandomquoteservice.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +30,6 @@ public class QuoteController {
        add("I'm not a great programmer; I'm just a good programmer with great habits. - Martin Fowler");
    }};
 
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
-    private RestTemplate restTemplate = new RestTemplate();
-
-    @Value("${magicEightBallServiceName}")
-    private String magicEightBallServiceName;
-
-    @Value("${serviceProtocol}")
-    private String serviceProtocol;
-
-    @Value("${servicePath}")
-    private String servicePath;
 
 
 
@@ -55,17 +38,5 @@ public class QuoteController {
     public String randomQuote(){
         randomGenorator = new Random();
         return listOfQuotes.get(new Random().nextInt(listOfQuotes.size()));
-    }
-
-    @RequestMapping(value="/anwserme", method = RequestMethod.GET)
-    public String anwserme() {
-
-        List<ServiceInstance> instances = discoveryClient.getInstances(magicEightBallServiceName);
-
-        String magicEightBallServiceUri = serviceProtocol + instances.get(0).getHost() + ":" + instances.get(0).getPort() + servicePath;
-
-        String answer = restTemplate.getForObject(magicEightBallServiceUri, String.class);
-
-        return answer;
     }
 }
